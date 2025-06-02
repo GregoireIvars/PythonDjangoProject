@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ajouter un article</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px auto;
+      max-width: 600px;
+      background-color: #f9fafb;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #0d6efd;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      font-weight: 700;
+    }
+
+    form {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #444;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1.5px solid #ced4da;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      box-sizing: border-box;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: #0d6efd;
+      outline: none;
+      box-shadow: 0 0 8px rgba(13, 110, 253, 0.3);
+    }
+
+    button.btn,
+    a.btn {
+      display: inline-block;
+      font-weight: 600;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+      font-size: 1rem;
+      margin-right: 12px;
+      color: white;
+      background-color: #0d6efd;
+      box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+    }
+
+    button.btn:hover,
+    a.btn:hover {
+      background-color: #084cd9;
+      box-shadow: 0 6px 14px rgba(8, 76, 217, 0.5);
+    }
+
+    a.btn.btn-secondary {
+      background-color: #6c757d;
+      box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3);
+    }
+
+    a.btn.btn-secondary:hover {
+      background-color: #565e64;
+      box-shadow: 0 6px 14px rgba(86, 94, 100, 0.5);
+    }
+
+    @media (max-width: 480px) {
+      body {
+        margin: 20px 10px;
+        padding: 15px;
+      }
+
+      button.btn,
+      a.btn {
+        width: 100%;
+        margin: 10px 0 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Ajouter un Article</h1>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="{{ form.titre.id_for_label }}">Titre :</label>
+      {{ form.titre }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.auteur.id_for_label }}">Auteur :</label>
+      {{ form.auteur }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.contenu.id_for_label }}">Contenu :</label>
+      {{ form.contenu }}
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.categorie.id_for_label }}">Categorie :</label>
+      {{ form.categorie }}
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn">Enregistrer</button>
+      <a href="{% url 'home' %}" class="btn btn-secondary">Annuler</a>
+    </div>
+  </form>
+</body>
+</html>
