@@ -7,8 +7,18 @@ class NoCacheMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
         
-        # Ajouter des headers pour éviter le cache sur certaines pages
-        if any(path in request.path for path in ['/ajouter/', '/modifier/', '/profil/', '/login/', '/logout/', '/article/']):
+        # ✅ Headers anti-cache seulement pour les pages sensibles
+        sensitive_paths = [
+            '/ajouter/',
+            '/modifier/', 
+            '/profil/',
+            '/login/',
+            '/logout/',
+            '/signup/',
+            '/article/',  # Pages d'articles (pour commentaires)
+        ]
+        
+        if any(path in request.path for path in sensitive_paths):
             add_never_cache_headers(response)
             response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
             response['Pragma'] = 'no-cache'
