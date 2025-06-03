@@ -3,73 +3,80 @@
 {% block title %}Ajouter un article - Mon Blog Django{% endblock %}
 
 {% block content %}
-<div class="form-container">
-    <h1><i class="fas fa-plus-circle me-2"></i>Ajouter un Article</h1>
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'blog:home' %}">Accueil</a></li>
+            <li class="breadcrumb-item active">Ajouter un article</li>
+        </ol>
+    </nav>
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3><i class="fas fa-plus-circle me-2"></i>Ajouter un Article</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-        <div class="mb-3">
-            <label for="{{ form.titre.id_for_label }}" class="form-label">
-                <i class="fas fa-heading me-1"></i>Titre :
-            </label>
-            {{ form.titre }}
-            {% if form.titre.errors %}
-                <div class="text-danger">{{ form.titre.errors }}</div>
-            {% endif %}
-        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.titre.id_for_label }}" class="form-label">
+                                <i class="fas fa-heading me-1"></i>Titre *
+                            </label>
+                            {{ form.titre }}
+                            {% if form.titre.errors %}
+                                <div class="text-danger">{{ form.titre.errors.0 }}</div>
+                            {% endif %}
+                        </div>
 
-        <div class="mb-3">
-            <label for="{{ form.auteur.id_for_label }}" class="form-label">
-                <i class="fas fa-user me-1"></i>Auteur :
-            </label>
-            {{ form.auteur }}
-            {% if form.auteur.errors %}
-                <div class="text-danger">{{ form.auteur.errors }}</div>
-            {% endif %}
-        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.categorie.id_for_label }}" class="form-label">
+                                <i class="fas fa-tag me-1"></i>Catégorie
+                            </label>
+                            {{ form.categorie }}
+                            {% if form.categorie.errors %}
+                                <div class="text-danger">{{ form.categorie.errors.0 }}</div>
+                            {% endif %}
+                        </div>
 
-        <div class="mb-3">
-            <label for="{{ form.contenu.id_for_label }}" class="form-label">
-                <i class="fas fa-align-left me-1"></i>Contenu :
-            </label>
-            {{ form.contenu }}
-            {% if form.contenu.errors %}
-                <div class="text-danger">{{ form.contenu.errors }}</div>
-            {% endif %}
-        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.contenu.id_for_label }}" class="form-label">
+                                <i class="fas fa-align-left me-1"></i>Contenu *
+                            </label>
+                            {{ form.contenu }}
+                            {% if form.contenu.errors %}
+                                <div class="text-danger">{{ form.contenu.errors.0 }}</div>
+                            {% endif %}
+                        </div>
 
-        <div class="mb-3">
-            <label for="{{ form.categorie.id_for_label }}" class="form-label">
-                <i class="fas fa-tag me-1"></i>Catégorie :
-            </label>
-            {{ form.categorie }}
-            {% if form.categorie.errors %}
-                <div class="text-danger">{{ form.categorie.errors }}</div>
-            {% endif %}
-        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.images.id_for_label }}" class="form-label">
+                                <i class="fas fa-image me-1"></i>Image (optionnelle)
+                            </label>
+                            {{ form.images }}
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>Formats acceptés : JPG, PNG, GIF (Max 5MB)
+                            </div>
+                            {% if form.images.errors %}
+                                <div class="text-danger">{{ form.images.errors.0 }}</div>
+                            {% endif %}
+                        </div>
 
-        <div class="mb-3">
-            <label for="{{ form.images.id_for_label }}" class="form-label">
-                <i class="fas fa-image me-1"></i>Image :
-            </label>
-            {{ form.images }}
-            <div class="form-text">
-                <i class="fas fa-info-circle me-1"></i>Formats acceptés : JPG, PNG, GIF (Max 5MB)
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'blog:home' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Annuler
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Publier l'article
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            {% if form.images.errors %}
-                <div class="text-danger">{{ form.images.errors }}</div>
-            {% endif %}
         </div>
-
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary me-3">
-                <i class="fas fa-save me-1"></i>Enregistrer
-            </button>
-            <a href="{% url 'home' %}" class="btn btn-secondary">
-                <i class="fas fa-times me-1"></i>Annuler
-            </a>
-        </div>
-    </form>
+    </div>
 </div>
 {% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'blog/layout.html' %}
+
+{% block title %}Mon Profil - Mon Blog Django{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Carte de profil -->
+    <div class="col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    {% if profile.avatar %}
+                        <img src="{{ profile.avatar.url }}" 
+                             alt="Avatar de {{ user.username }}" 
+                             class="rounded-circle mb-3"
+                             style="width: 120px; height: 120px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width: 120px; height: 120px;">
+                            <i class="fas fa-user fa-3x text-white"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <h4 class="card-title">
+                    {% if user.first_name %}
+                        {{ user.first_name }} {{ user.last_name }}
+                    {% else %}
+                        {{ user.username }}
+                    {% endif %}
+                </h4>
+                
+                <p class="text-muted">@{{ user.username }}</p>
+                
+                {% if profile.bio %}
+                    <p class="card-text">{{ profile.bio }}</p>
+                {% endif %}
+                
+                <div class="row text-center mt-3">
+                    <div class="col">
+                        <strong>{{ user.articles.count }}</strong>
+                        <br><small class="text-muted">Articles</small>
+                    </div>
+                    <div class="col">
+                        <strong>{{ user.commentaires.count }}</strong>
+                        <br><small class="text-muted">Commentaires</small>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="{% url 'blog:edit_profile' %}" class="btn btn-primary">
+                        <i class="fas fa-edit me-1"></i>Modifier le profil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contenu principal -->
+    <div class="col-lg-8">
+        <!-- Informations -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informations</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Email :</strong> {{ user.email|default:"Non renseigné" }}</p>
+                        <p><strong>Ville :</strong> {{ profile.ville|default:"Non renseignée" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Membre depuis :</strong> {{ user.date_joined|date:"d F Y" }}</p>
+                        {% if profile.site_web %}
+                            <p><strong>Site web :</strong> 
+                                <a href="{{ profile.site_web }}" target="_blank" class="text-decoration-none">
+                                    {{ profile.site_web }}
+                                </a>
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mes articles -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-newspaper me-2"></i>Mes Articles</h5>
+                <a href="{% url 'blog:ajouter_article' %}" class="btn btn-sm btn-success">
+                    <i class="fas fa-plus me-1"></i>Nouvel article
+                </a>
+            </div>
+            <div class="card-body">
+                {% if user.articles.all %}
+                    {% for article in user.articles.all %}
+                        <div class="border-bottom pb-3 mb-3">
+                            <h6 class="mb-1">
+                                <a href="{% url 'blog:detail_article' article.pk %}" class="text-decoration-none">
+                                    {{ article.titre }}
+                                </a>
+                            </h6>
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>{{ article.date_publication|date:"d/m/Y" }}
+                                {% if article.categorie %}
+                                    <span class="ms-2">
+                                        <i class="fas fa-tag me-1"></i>{{ article.categorie.nom }}
+                                    </span>
+                                {% endif %}
+                            </small>
+                            <p class="mt-2 mb-0">{{ article.contenu|truncatewords:20 }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Vous n'avez pas encore écrit d'articles.</p>
+                        <a href="{% url 'blog:ajouter_article' %}" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i>Écrire votre premier article
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
