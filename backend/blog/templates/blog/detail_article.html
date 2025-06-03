@@ -1,131 +1,198 @@
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 0 20px;
-    color: #333;
-    background: #f9f9f9;
-  }
+{% extends 'blog/layout.html' %}
 
-  h1 {
-    color: #2c3e50;
-    border-bottom: 2px solid #007cba;
-    padding-bottom: 8px;
-    margin-bottom: 20px;
-  }
+{% block title %}{{ article.titre }} - Mon Blog Django{% endblock %}
 
-  p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-  }
+{% block content %}
+<div class="fade-in">
+    <!-- Navigation Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}"><i class="fas fa-home me-1"></i>Accueil</a>
+            </li>
+            {% if article.categorie %}
+                <li class="breadcrumb-item">
+                    <a href="{% url 'articles_par_categorie' article.categorie.id %}">
+                        <i class="fas fa-tag me-1"></i>{{ article.categorie.nom }}
+                    </a>
+                </li>
+            {% endif %}
+            <li class="breadcrumb-item active" aria-current="page">{{ article.titre }}</li>
+        </ol>
+    </nav>
 
-  strong {
-    color: #555;
-  }
+    <!-- Article -->
+    <article class="article-detail">
+        <header class="article-meta">
+            <h1 class="text-start mb-3">{{ article.titre }}</h1>
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <span class="text-muted me-3">
+                        <i class="fas fa-user me-1"></i><strong>{{ article.auteur }}</strong>
+                    </span>
+                    <span class="text-muted">
+                        <i class="fas fa-calendar me-1"></i>{{ article.date_publication|date:"d F Y à H:i" }}
+                    </span>
+                </div>
+                {% if article.categorie %}
+                    <span class="badge bg-primary">
+                        <i class="fas fa-tag me-1"></i>{{ article.categorie.nom }}
+                    </span>
+                {% endif %}
+            </div>
+        </header>
 
-  h2, h3 {
-    color: #007cba;
-    margin-top: 40px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #007cba;
-    padding-bottom: 5px;
-  }
+        <!-- Affichage de l'image compacte -->
+        {% if article.images %}
+            <div class="text-center">
+                <div class="article-image-container" onclick="openImageModal('{{ article.images.url }}')">
+                    <img src="{{ article.images.url }}" 
+                         class="article-image" 
+                         alt="{{ article.titre }}"
+                         id="articleImage">
+                    <div class="image-overlay">
+                        <i class="fas fa-search-plus me-2"></i>Agrandir
+                    </div>
+                    <div class="image-info">
+                        <i class="fas fa-expand-alt me-1"></i>Zoom
+                    </div>
+                </div>
+                <small class="text-muted mt-2 d-block">
+                    <i class="fas fa-info-circle me-1"></i>Cliquez pour voir en taille réelle
+                </small>
+            </div>
+        {% else %}
+            <div class="no-image-placeholder">
+                <i class="fas fa-image"></i>
+                <p class="mb-0">Aucune image associée</p>
+            </div>
+        {% endif %}
 
-  ul {
-    list-style: none;
-    padding: 0;
-  }
+        <div class="article-content mt-4">
+            <div style="font-size: 1.1rem; line-height: 1.8; color: #444;">
+                {{ article.contenu|linebreaks }}
+            </div>
+        </div>
 
-  ul li {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 12px 15px;
-    margin-bottom: 12px;
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.05);
-  }
+        <div class="text-center mt-4 pt-3 border-top">
+            <a href="{% url 'modifier_article' article.pk %}" class="btn btn-outline-primary me-2">
+                <i class="fas fa-edit me-1"></i>Modifier l'article
+            </a>
+            <a href="{% url 'supprimer_article' article.pk %}" class="btn btn-outline-danger" 
+               onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">
+                <i class="fas fa-trash me-1"></i>Supprimer l'article
+            </a>
+        </div>
+    </article>
 
-  ul li strong {
-    color: #007cba;
-  }
+    <!-- Section commentaires -->
+    <section class="comment-section">
+        <h3 class="mb-4">
+            <i class="fas fa-comments me-2"></i>Commentaires 
+            <span class="badge bg-secondary">{{ commentaires.count }}</span>
+        </h3>
+        
+        {% if commentaires %}
+            <div class="mb-4">
+                {% for commentaire in commentaires %}
+                    <div class="comment-item">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <strong class="comment-author">
+                                <i class="fas fa-user-circle me-1"></i>{{ commentaire.auteur }}
+                            </strong>
+                            <small class="comment-date">
+                                <i class="fas fa-clock me-1"></i>{{ commentaire.date_publication|date:"d/m/Y à H:i" }}
+                            </small>
+                        </div>
+                        <p class="mb-0" style="color: #555;">{{ commentaire.contenu }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                Aucun commentaire pour le moment. Soyez le premier à commenter !
+            </div>
+        {% endif %}
 
-  form {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.05);
-  }
+        <!-- Formulaire d'ajout de commentaire -->
+        <div class="mt-4 p-3 bg-white rounded">
+            <h4><i class="fas fa-plus-circle me-2"></i>Ajouter un commentaire</h4>
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="{{ form.auteur.id_for_label }}" class="form-label">
+                        <i class="fas fa-user me-1"></i>Votre nom :
+                    </label>
+                    {{ form.auteur }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.contenu.id_for_label }}" class="form-label">
+                        <i class="fas fa-comment me-1"></i>Votre commentaire :
+                    </label>
+                    {{ form.contenu }}
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane me-1"></i>Publier le commentaire
+                </button>
+            </form>
+        </div>
+    </section>
+</div>
 
-  form p {
-    margin-bottom: 15px;
-  }
+<!-- Modal pour afficher l'image en grand -->
+<div id="imageModal" class="image-modal" onclick="closeImageModal()">
+    <span class="close-modal" onclick="closeImageModal()">&times;</span>
+    <img id="modalImage" class="modal-image" alt="Image en grand">
+</div>
+{% endblock %}
 
-  input[type="text"], textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #bbb;
-    border-radius: 5px;
-    font-size: 1rem;
-    resize: vertical;
-  }
+{% block extra_js %}
+<script>
+// Fonction pour adapter l'image selon ses dimensions
+document.addEventListener('DOMContentLoaded', function() {
+    const articleImage = document.getElementById('articleImage');
+    if (articleImage) {
+        articleImage.onload = function() {
+            const aspectRatio = this.naturalWidth / this.naturalHeight;
+            
+            // Si l'image est très large (paysage)
+            if (aspectRatio > 2) {
+                this.classList.add('wide-image');
+            }
+            // Si l'image est très haute (portrait)
+            else if (aspectRatio < 0.7) {
+                this.classList.add('tall-image');
+            }
+        };
+        
+        // Si l'image est déjà chargée
+        if (articleImage.complete) {
+            articleImage.onload();
+        }
+    }
+});
 
-  textarea {
-    min-height: 100px;
-  }
+// Fonctions pour le modal d'image
+function openImageModal(imageSrc) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    modal.style.display = 'block';
+    modalImage.src = imageSrc;
+    document.body.style.overflow = 'hidden';
+}
 
-  button[type="submit"] {
-    background-color: #007cba;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
 
-  button[type="submit"]:hover {
-    background-color: #005f8a;
-  }
-
-  a.delete-article {
-    display: inline-block;
-    margin-top: 30px;
-    padding: 10px 20px;
-    background-color: #e74c3c;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  }
-
-  a.delete-article:hover {
-    background-color: #c0392b;
-  }
-</style>
-
-
-<h1>{{ article.titre }}</h1>
-<p><strong>Auteur:</strong> {{ article.auteur }}</p>
-<p>{{ article.contenu }}</p>
-
-<h2>Commentaires</h2>
-<ul>
-  {% for commentaire in commentaires %}
-    <li><strong>{{ commentaire.auteur }}</strong> ({{ commentaire.date_creation|date:"d/m/Y H:i" }}) : {{ commentaire.contenu }}</li>
-  {% empty %}
-    <li>Aucun commentaire.</li>
-  {% endfor %}
-</ul>
-
-<h3>Ajouter un commentaire</h3>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Envoyer</button>
-</form>
-
-<a href="{% url 'supprimer_article' article.pk %}">Supprimer l'article</a>
+// Fermer le modal avec la touche Échap
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeImageModal();
+    }
+});
+</script>
+{% endblock %}

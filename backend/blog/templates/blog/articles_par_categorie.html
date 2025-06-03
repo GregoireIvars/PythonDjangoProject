@@ -1,67 +1,147 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Articles - {{ categorie.nom }}</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <style>
-    body {
-      background: #f0f4f8;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    .card {
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      transition: transform 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    }
-  </style>
-</head>
-<body>
-  <div class="container mt-4">
+{% extends 'blog/layout.html' %}
+
+{% block title %}Articles - {{ categorie.nom }} - Mon Blog Django{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <!-- Navigation Breadcrumb -->
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Accueil</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'liste_categories' %}">Catégories</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ categorie.nom }}</li>
-      </ol>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}">
+                    <i class="fas fa-home me-1"></i>Accueil
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'liste_categories' %}">
+                    <i class="fas fa-tags me-1"></i>Catégories
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {{ categorie.nom }}
+            </li>
+        </ol>
     </nav>
 
-    <h1 class="mb-4">Articles de la catégorie : {{ categorie.nom }}</h1>
-    <p class="text-muted mb-4">{{ categorie.description }}</p>
-
-    {% if articles %}
-      <div class="row">
-        {% for article in articles %}
-          <div class="col-md-6 mb-4">
-            <div class="card h-100">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title">{{ article.titre }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">
-                  Par {{ article.auteur }} - {{ article.date_publication|date:"d/m/Y à H:i" }}
-                </h6>
-                <p class="card-text">{{ article.contenu|truncatewords:30 }}</p>
-                <div class="mt-auto">
-                  <a href="{% url 'detail_article' article.pk %}" class="btn btn-sm btn-primary">Lire l'article</a>
-                  <a href="{% url 'modifier_article' article.pk %}" class="btn btn-sm btn-outline-secondary">Modifier</a>
-                </div>
-              </div>
+    <!-- En-tête de catégorie amélioré -->
+    <div class="category-header">
+        <h1>
+            <i class="fas fa-tag me-2"></i>{{ categorie.nom }}
+        </h1>
+        
+        {% if categorie.description %}
+            <p class="category-description">{{ categorie.description }}</p>
+        {% endif %}
+        
+        <div class="category-stats">
+            <div class="stat-item">
+                <i class="fas fa-newspaper"></i>
+                <strong>{{ articles.count }}</strong> 
+                article{{ articles.count|pluralize }}
             </div>
-          </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="alert alert-info">
-        Aucun article dans cette catégorie.
-        <a href="{% url 'ajouter_article' %}" class="alert-link">Ajouter un article</a>
-      </div>
-    {% endif %}
-  </div>
+            <div class="stat-item">
+                <i class="fas fa-calendar"></i>
+                Créée le {{ categorie.date_creation|date:"d/m/Y" }}
+            </div>
+            {% if articles %}
+                <div class="stat-item">
+                    <i class="fas fa-clock"></i>
+                    Dernier article : {{ articles.first.date_publication|date:"d/m/Y" }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <!-- Articles -->
+    {% if articles %}
+        <div class="articles-grid">
+            <div class="row">
+                {% for article in articles %}
+                    <div class="col-lg-6 col-xl-4 mb-4">
+                        <article class="card article-card h-100">
+                            <div class="article-image-container-grid">
+                                {% if article.images %}
+                                    <img src="{{ article.images.url }}" class="article-image-grid" alt="{{ article.titre }}">
+                                    <div class="image-overlay"></div>
+                                {% else %}
+                                    <div class="image-placeholder">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="article-badge">
+                                    <i class="fas fa-tag me-1"></i>{{ categorie.nom }}
+                                </div>
+                            </div>
+                            
+                            <div class="article-content-grid">
+                                <h3 class="article-title">{{ article.titre }}</h3>
+                                
+                                <div class="article-meta-grid">
+                                    <div class="meta-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>{{ article.auteur }}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>{{ article.date_publication|date:"d/m/Y" }}</span>
+                                    </div>
+                                </div>
+                                
+                                <p class="article-excerpt">
+                                    {{ article.contenu|truncatewords:25 }}
+                                </p>
+                                
+                                <div class="article-actions">
+                                    <a href="{% url 'detail_article' article.pk %}" 
+                                       class="btn btn-primary btn-sm me-2">
+                                        <i class="fas fa-eye me-1"></i>Lire l'article
+                                    </a>
+                                    <a href="{% url 'modifier_article' article.pk %}" 
+                                       class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-edit me-1"></i>Modifier
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Actions supplémentaires -->
+        <div class="action-buttons">
+            <h4 class="mb-3">
+                <i class="fas fa-plus-circle me-2"></i>Ajouter du contenu
+            </h4>
+            <a href="{% url 'ajouter_article' %}" class="btn btn-success me-3">
+                <i class="fas fa-plus me-1"></i>Nouvel article dans {{ categorie.nom }}
+            </a>
+            <a href="{% url 'liste_categories' %}" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-1"></i>Retour aux catégories
+            </a>
+        </div>
+        
+    {% else %}
+        <!-- État vide amélioré -->
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-folder-open"></i>
+            </div>
+            <h3 class="mb-3">Aucun article dans cette catégorie</h3>
+            <p class="text-muted mb-4">
+                La catégorie "{{ categorie.nom }}" ne contient pas encore d'articles. 
+                Commencez par créer votre premier article !
+            </p>
+            <div>
+                <a href="{% url 'ajouter_article' %}" class="btn btn-primary me-3">
+                    <i class="fas fa-plus me-1"></i>Créer le premier article
+                </a>
+                <a href="{% url 'liste_categories' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Retour aux catégories
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

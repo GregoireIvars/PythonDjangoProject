@@ -1,5 +1,10 @@
 from django.db import models
 
+
+def upload_to(instance, filename):
+    """Fonction pour organiser le stockage des images"""
+    return f'articles/{instance.titre[:20]}/{filename}'
+
 class Categorie(models.Model):
     nom = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
@@ -15,6 +20,13 @@ class Article(models.Model):
     auteur = models.CharField(max_length=100)
     date_publication = models.DateTimeField(auto_now_add=True)
     categorie = models.ForeignKey(Categorie, on_delete=models.SET_NULL, null=True, blank=True, related_name="articles")
+    images = models.ImageField(upload_to='articles/', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Article'
+        verbose_name_plural = 'Articles'
+        ordering = ['-date_publication']
+    
 
     def __str__(self):
         return self.titre
@@ -35,8 +47,4 @@ class Commentaire(models.Model):
     def __str__(self):
         return f'Comment by {self.auteur} on {self.article.titre}'
 
-class Meta:
-    verbose_name = 'Article'
-    verbose_name_plural = 'Articles'
-    ordering = ['-date_publication']
-    
+

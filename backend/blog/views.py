@@ -6,12 +6,17 @@ from .forms import ArticleForm, CommentaireForm, CategorieForm
 
 def home(request):
     articles = Article.objects.all()
-    return render(request, 'blog/home.html', {'articles': articles})
+    categories_count = Categorie.objects.count()
+    return render(request, 'blog/home.html', {
+        'articles': articles,
+        'categories_count': categories_count,
+    })
 def ajouter_article(request):
     if request.method == 'POST':
-        form = ArticleForm(request.POST)
+        form = ArticleForm(request.POST, request.FILES)  # Assurez-vous de gérer les fichiers
         if form.is_valid():
             form.save()
+            messages.success(request, "L'article a été ajouté avec succès.")
             return redirect('home')  # ou autre url
     else:
         form = ArticleForm()
@@ -26,6 +31,7 @@ def detail_article(request, pk):
             commentaire = form.save(commit=False)
             commentaire.article = article
             commentaire.save()
+            messages.success(request, "Commentaire ajouté avec succès.")
             return redirect('detail_article', pk=article.pk)
     else:
         form = CommentaireForm()
@@ -39,6 +45,7 @@ def detail_article(request, pk):
 def supprimer_article(request, pk):
     article = get_object_or_404(Article, pk=pk)
     article.delete()
+    messages.success(request, "L'article a été supprimé avec succès.")
     return redirect('home')
 
 def modifier_article(request, pk):
@@ -47,6 +54,7 @@ def modifier_article(request, pk):
         form = ArticleForm(request.POST, instance=article)
         if form.is_valid():
             form.save()
+            messages.success(request, "L'article a été modifié avec succès.")
             return redirect('home')
     else:
         form = ArticleForm(instance=article)
