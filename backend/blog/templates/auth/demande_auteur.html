@@ -1,0 +1,83 @@
+<!-- filepath: c:\Users\frus84312\AppPython\backend\blog\templates\auth\demander_auteur.html -->
+{% extends 'blog/layout.html' %}
+{% load static %}
+
+{% block title %}Demander à devenir auteur{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-warning text-dark text-center py-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-star me-2"></i>
+                        Devenir Auteur
+                    </h3>
+                    <p class="mb-0 mt-2">Partagez vos connaissances avec notre communauté</p>
+                </div>
+                
+                <div class="card-body p-5">
+                    <!-- Informations sur le statut auteur -->
+                    <div class="alert alert-info mb-4">
+                        <h6>
+                            <i class="fas fa-info-circle me-2"></i>
+                            Qu'est-ce qu'un auteur ?
+                        </h6>
+                        <ul class="mb-0 mt-2">
+                            <li>Créer et publier des articles</li>
+                            <li>Modifier et supprimer vos propres articles</li>
+                            <li>Commenter et interagir avec la communauté</li>
+                            <li>Accès à des outils de rédaction avancés</li>
+                        </ul>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="id_message" class="form-label">
+                                <i class="fas fa-comment me-1"></i>
+                                {{ form.message.label }}
+                            </label>
+                            {{ form.message }}
+                            {% if form.message.help_text %}
+                            <div class="form-text">{{ form.message.help_text }}</div>
+                            {% endif %}
+                            {% if form.message.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.message.errors.0 }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="alert alert-light border">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                <strong>Processus de validation :</strong><br>
+                                1. Votre demande sera examinée par un administrateur<br>
+                                2. Vous recevrez une réponse dans votre profil<br>
+                                3. En cas d'acceptation, vous pourrez immédiatement créer des articles
+                            </small>
+                        </div>
+
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-warning btn-lg text-dark">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Envoyer ma demande
+                            </button>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="{% url 'blog:profile' %}" class="text-muted text-decoration-none">
+                                <i class="fas fa-arrow-left me-1"></i>
+                                Retour au profil
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

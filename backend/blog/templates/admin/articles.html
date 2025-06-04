@@ -1,0 +1,165 @@
+<!-- filepath: c:\Users\frus84312\AppPython\backend\blog\templates\admin\articles.html -->
+{% extends 'blog/layout.html' %}
+{% load static %}
+
+{% block title %}Administration - Gestion articles{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'blog:admin_panel' %}">
+                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                </a>
+            </li>
+            <li class="breadcrumb-item active">Articles</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="fas fa-newspaper text-primary me-2"></i>
+            Gestion des articles
+        </h2>
+        
+        <!-- Filtres et recherche -->
+        <div class="d-flex gap-2">
+            <form method="get" class="d-flex gap-2">
+                <input type="text" name="auteur" value="{{ auteur_filter }}" class="form-control" placeholder="Rechercher par auteur..." style="width: 200px;">
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+                {% if auteur_filter %}
+                <a href="{% url 'blog:admin_articles' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i>
+                </a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <!-- Statistiques rapides -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h4>{{ articles.count }}</h4>
+                    <small>Total articles</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h4>{{ articles|length }}</h4>
+                    <small>Affichés</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des articles -->
+    <div class="card">
+        <div class="card-body">
+            {% if articles %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 60px;">Image</th>
+                            <th>Titre</th>
+                            <th>Auteur</th>
+                            <th>Catégorie</th>
+                            <th>Commentaires</th>
+                            <th>Publication</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for article in articles %}
+                        <tr>
+                            <td>
+                                {% if article.images %}
+                                <img src="{{ article.images.url }}" alt="{{ article.titre }}" class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                                {% else %}
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-image text-muted"></i>
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <strong>{{ article.titre }}</strong><br>
+                                <small class="text-muted">{{ article.contenu|truncatechars:60 }}</small>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px;">
+                                        <i class="fas fa-user text-white small"></i>
+                                    </div>
+                                    <div>
+                                        <strong>{{ article.auteur.first_name|default:article.auteur.username }}</strong><br>
+                                        <small class="text-muted">@{{ article.auteur.username }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if article.categorie %}
+                                <span class="badge bg-secondary">{{ article.categorie.nom }}</span>
+                                {% else %}
+                                <em class="text-muted">Sans catégorie</em>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-info">
+                                    {{ article.commentaires.count }} commentaire{{ article.commentaires.count|pluralize }}
+                                </span>
+                            </td>
+                            <td>
+                                <small>
+                                    {{ article.date_publication|date:"d/m/Y" }}<br>
+                                    <span class="text-muted">{{ article.date_publication|time:"H:i" }}</span>
+                                </small>
+                                {% if article.date_modification != article.date_publication %}
+                                <br><small class="text-warning">
+                                    <i class="fas fa-edit me-1"></i>Modifié
+                                </small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'blog:detail_article' article.id %}" class="btn btn-outline-primary" title="Voir l'article">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'blog:modifier_article' article.id %}" class="btn btn-outline-secondary" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'blog:supprimer_article' article.id %}" class="btn btn-outline-danger" title="Supprimer" onclick="return confirm('Supprimer cet article ?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-newspaper fa-3x mb-3"></i>
+                <h5>Aucun article trouvé</h5>
+                {% if auteur_filter %}
+                <p>Aucun article trouvé pour l'auteur "{{ auteur_filter }}".</p>
+                <a href="{% url 'blog:admin_articles' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-list me-2"></i>Voir tous les articles
+                </a>
+                {% else %}
+                <p>Aucun article n'a encore été publié.</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

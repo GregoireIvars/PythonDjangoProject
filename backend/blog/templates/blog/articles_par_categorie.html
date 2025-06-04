@@ -8,12 +8,12 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="{% url 'home' %}">
+                <a href="{% url 'blog:home' %}">
                     <i class="fas fa-home me-1"></i>Accueil
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{% url 'liste_categories' %}">
+                <a href="{% url 'blog:liste_categories' %}">
                     <i class="fas fa-tags me-1"></i>Catégories
                 </a>
             </li>
@@ -59,49 +59,20 @@
                 {% for article in articles %}
                     <div class="col-lg-6 col-xl-4 mb-4">
                         <article class="card article-card h-100">
-                            <div class="article-image-container-grid">
-                                {% if article.images %}
-                                    <img src="{{ article.images.url }}" class="article-image-grid" alt="{{ article.titre }}">
-                                    <div class="image-overlay"></div>
-                                {% else %}
-                                    <div class="image-placeholder">
-                                        <i class="fas fa-image"></i>
-                                    </div>
-                                {% endif %}
-                                
-                                <div class="article-badge">
-                                    <i class="fas fa-tag me-1"></i>{{ categorie.nom }}
-                                </div>
+                            {% if article.images %}
+                            <img src="{{ article.images.url }}" class="card-img-top" alt="{{ article.titre }}" style="height: 200px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ article.titre }}</h5>
+                                <p class="card-text">{{ article.contenu|truncatechars:100 }}</p>
+                                <small class="text-muted">
+                                    Par {{ article.auteur.first_name|default:article.auteur.username }} - {{ article.date_publication|date:"d/m/Y" }}
+                                </small>
                             </div>
-                            
-                            <div class="article-content-grid">
-                                <h3 class="article-title">{{ article.titre }}</h3>
-                                
-                                <div class="article-meta-grid">
-                                    <div class="meta-item">
-                                        <i class="fas fa-user"></i>
-                                        <span>{{ article.auteur }}</span>
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>{{ article.date_publication|date:"d/m/Y" }}</span>
-                                    </div>
-                                </div>
-                                
-                                <p class="article-excerpt">
-                                    {{ article.contenu|truncatewords:25 }}
-                                </p>
-                                
-                                <div class="article-actions">
-                                    <a href="{% url 'detail_article' article.pk %}" 
-                                       class="btn btn-primary btn-sm me-2">
-                                        <i class="fas fa-eye me-1"></i>Lire l'article
-                                    </a>
-                                    <a href="{% url 'modifier_article' article.pk %}" 
-                                       class="btn btn-outline-secondary btn-sm">
-                                        <i class="fas fa-edit me-1"></i>Modifier
-                                    </a>
-                                </div>
+                            <div class="card-footer">
+                                <a href="{% url 'blog:detail_article' article.id %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>Lire l'article
+                                </a>
                             </div>
                         </article>
                     </div>
@@ -114,10 +85,10 @@
             <h4 class="mb-3">
                 <i class="fas fa-plus-circle me-2"></i>Ajouter du contenu
             </h4>
-            <a href="{% url 'ajouter_article' %}" class="btn btn-success me-3">
+            <a href="{% url 'blog:ajouter_article' %}" class="btn btn-success me-3">
                 <i class="fas fa-plus me-1"></i>Nouvel article dans {{ categorie.nom }}
             </a>
-            <a href="{% url 'liste_categories' %}" class="btn btn-outline-primary">
+            <a href="{% url 'blog:liste_categories' %}" class="btn btn-outline-primary">
                 <i class="fas fa-arrow-left me-1"></i>Retour aux catégories
             </a>
         </div>
@@ -134,10 +105,10 @@
                 Commencez par créer votre premier article !
             </p>
             <div>
-                <a href="{% url 'ajouter_article' %}" class="btn btn-primary me-3">
+                <a href="{% url 'blog:ajouter_article' %}" class="btn btn-primary me-3">
                     <i class="fas fa-plus me-1"></i>Créer le premier article
                 </a>
-                <a href="{% url 'liste_categories' %}" class="btn btn-outline-secondary">
+                <a href="{% url 'blog:liste_categories' %}" class="btn btn-outline-secondary">
                     <i class="fas fa-arrow-left me-1"></i>Retour aux catégories
                 </a>
             </div>

@@ -1,12 +1,13 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.utils import timezone
 from .models import Article, Commentaire, Categorie, UserProfile
 
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['titre', 'contenu', 'categorie', 'images']  # 'images' au pluriel comme dans le modèle
+        fields = ['titre', 'contenu', 'categorie', 'images']
         widgets = {
             'titre': forms.TextInput(attrs={
                 'placeholder': 'Titre de l\'article', 
@@ -20,7 +21,7 @@ class ArticleForm(forms.ModelForm):
             'categorie': forms.Select(attrs={
                 'class': 'form-control'
             }),
-            'images': forms.FileInput(attrs={  # 'images' au pluriel
+            'images': forms.FileInput(attrs={
                 'class': 'form-control', 
                 'accept': 'image/*'
             }),
@@ -54,7 +55,7 @@ class CategorieForm(forms.ModelForm):
             }),
         }
 
-# Formulaire d'inscription - Renommé pour correspondre aux views
+# ✅ Formulaire d'inscription modifié avec demande auteur
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={
         'class': 'form-control',
@@ -68,6 +69,20 @@ class UserRegistrationForm(UserCreationForm):
         'class': 'form-control',
         'placeholder': 'Votre nom (facultatif)'
     }))
+    
+    # ✅ Nouveaux champs pour demande auteur
+    demander_auteur = forms.BooleanField(
+        required=False,
+        label="Je souhaite devenir auteur pour publier des articles",
+        help_text="Votre demande sera examinée par un administrateur.",
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
+    message_demande = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+        required=False,
+        label="Message de motivation (optionnel)",
+        help_text="Expliquez pourquoi vous souhaitez devenir auteur."
+    )
 
     class Meta:
         model = User
@@ -103,7 +118,23 @@ class UserRegistrationForm(UserCreationForm):
         user.last_name = self.cleaned_data.get('last_name', '')
         if commit:
             user.save()
+            # ✅ Gérer la demande d'auteur si cochée
+            profile = user.profile
+            if self.cleaned_data['demander_auteur']:
+                profile.demande_auteur_statut = 'en_attente'
+                profile.demande_auteur_date = timezone.now()
+                profile.demande_auteur_message = self.cleaned_data['message_demande']
+                profile.save()
         return user
+
+# ✅ Nouveau formulaire pour demande auteur depuis profil
+class DemandeAuteurForm(forms.Form):
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control'}),
+        label="Message de motivation",
+        help_text="Expliquez pourquoi vous souhaitez devenir auteur.",
+        required=True
+    )
 
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -176,7 +207,6 @@ class UserProfileForm(forms.ModelForm):
     def save(self, commit=True):
         profile = super().save(commit=False)
         if commit:
-            # Sauvegarder les données de l'utilisateur
             user = profile.user
             user.first_name = self.cleaned_data.get('first_name', '')
             user.last_name = self.cleaned_data.get('last_name', '')
@@ -185,7 +215,6 @@ class UserProfileForm(forms.ModelForm):
             profile.save()
         return profile
 
-# Formulaire simple pour les commentaires (utilisé dans les vues)
 class SimpleCommentForm(forms.Form):
     contenu = forms.CharField(
         widget=forms.Textarea(attrs={

@@ -18,10 +18,23 @@ urlpatterns = [
     path('categorie/<int:categorie_id>/', views.articles_par_categorie, name='articles_par_categorie'),
     path('ajouter-categorie/', views.ajouter_categorie, name='ajouter_categorie'),
     
-    # ✅ Authentification dans le même namespace
+    # Authentification
     path('login/', views.user_login, name='login'),
     path('signup/', views.user_register, name='signup'),
     path('logout/', views.user_logout, name='logout'),
     path('profile/', views.profile, name='profile'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
+    
+    # ✅ Nouveaux URLs - Demande auteur
+    path('demander-auteur/', views.demander_auteur, name='demander_auteur'),
+    
+    # ✅ Nouveaux URLs - Admin Panel
+    path('admin-panel/', views.admin_panel, name='admin_panel'),
+    path('admin-panel/demandes/', views.admin_demandes, name='admin_demandes'),
+    path('admin-panel/traiter-demande/<int:user_id>/', views.traiter_demande_auteur, name='traiter_demande_auteur'),
+    path('admin-panel/utilisateurs/', views.admin_utilisateurs, name='admin_utilisateurs'),
+    path('admin-panel/changer-role/<int:user_id>/', views.changer_role_user, name='changer_role_user'),
+    path('admin-panel/articles/', views.admin_articles, name='admin_articles'),
+    path('admin-panel/categories/', views.admin_categories, name='admin_categories'),
+    path('admin-panel/supprimer-categorie/<int:categorie_id>/', views.supprimer_categorie, name='supprimer_categorie'),
 ]
