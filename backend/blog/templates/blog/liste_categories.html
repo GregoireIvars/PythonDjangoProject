@@ -1,14 +1,15 @@
 {% extends 'blog/layout.html' %}
+{% load i18n %}
 
-{% block title %}Catégories d'articles - Mon Blog Django{% endblock %}
+{% block title %}{% trans "Catégories d'articles" %} - {% trans "Mon Blog Django" %}{% endblock %}
 
 {% block content %}
-<h1><i class="fas fa-tags me-2"></i>Catégories d'articles</h1>
+<h1><i class="fas fa-tags me-2"></i>{% trans "Catégories d'articles" %}</h1>
 
 <!-- Bouton pour ajouter une catégorie -->
 <div class="mb-4 text-center">
     <a href="{% url 'blog:ajouter_categorie' %}" class="btn btn-success">
-        <i class="fas fa-plus me-2"></i>Ajouter une catégorie
+        <i class="fas fa-plus me-2"></i>{% trans "Ajouter une catégorie" %}
     </a>
 </div>
 
@@ -25,10 +26,10 @@
                             </h5>
                             <p class="card-text">{{ categorie.description|default:"(Pas de description)" }}</p>
                             <p class="text-muted small">
-                                <i class="fas fa-calendar me-1"></i>Créée le {{ categorie.date_creation|date:"d/m/Y H:i" }}
+                                <i class="fas fa-calendar me-1"></i>{% trans "Créée le" %} {{ categorie.date_creation|date:"d/m/Y H:i" }}
                             </p>
                             <a href="{% url 'blog:articles_par_categorie' categorie.id %}" class="btn btn-primary btn-sm">
-                                <i class="fas fa-eye me-1"></i>Voir les articles
+                                <i class="fas fa-eye me-1"></i>{% trans "Voir les articles" %}
                             </a>
                         </div>
                     </div>
@@ -38,8 +39,8 @@
     {% else %}
         <div class="alert alert-info text-center">
             <i class="fas fa-info-circle fa-2x mb-3"></i>
-            <h4>Aucune catégorie enregistrée</h4>
-            <p>Commencez par <a href="{% url 'blog:ajouter_categorie' %}" class="alert-link">créer votre première catégorie</a> !</p>
+            <h4>{% trans "Aucune catégorie enregistrée" %}</h4>
+            <p>{% trans "Commencez par" %} <a href="{% url 'blog:ajouter_categorie' %}" class="alert-link">{% trans "créer votre première catégorie" %}</a> !</p>
         </div>
     {% endif %}
 </form>

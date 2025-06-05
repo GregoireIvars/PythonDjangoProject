@@ -1,8 +1,9 @@
 {% extends 'blog/layout.html' %}
 {% load static %}
 {% load blog_tags %}
+{% load i18n %}
 
-{% block title %}Mon Profil{% endblock %}
+{% block title %}{% trans "Mon Profil" %}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -82,7 +83,7 @@
             </div>
             <div class="col-md-4 text-md-end">
                 <a href="{% url 'blog:edit_profile' %}" class="btn btn-light btn-lg">
-                    <i class="fas fa-edit me-2"></i>Modifier profil
+                    <i class="fas fa-edit me-2"></i>{% trans "Modifier profil" %}
                 </a>
             </div>
         </div>
@@ -94,30 +95,30 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0">
-                        <i class="fas fa-info-circle me-2"></i>Informations
+                        <i class="fas fa-info-circle me-2"></i>{% trans "Informations" %}
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label class="form-label text-muted">Email</label>
+                        <label class="form-label text-muted">{% trans "Email" %}</label>
                         <p class="mb-0">{{ user.email|default:"Non renseigné" }}</p>
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label text-muted">Membre depuis</label>
+                        <label class="form-label text-muted">{% trans "Membre depuis" %}</label>
                         <p class="mb-0">{{ user.date_joined|date:"d F Y" }}</p>
                     </div>
                     
                     {% if profile.bio %}
                     <div class="mb-3">
-                        <label class="form-label text-muted">Biographie</label>
+                        <label class="form-label text-muted">{% trans "Biographie" %}</label>
                         <p class="mb-0">{{ profile.bio|linebreaksbr }}</p>
                     </div>
                     {% endif %}
                     
                     {% if profile.ville %}
                     <div class="mb-3">
-                        <label class="form-label text-muted">Ville</label>
+                        <label class="form-label text-muted">{% trans "Ville" %}</label>
                         <p class="mb-0">
                             <i class="fas fa-map-marker-alt me-1"></i>{{ profile.ville }}
                         </p>
@@ -126,10 +127,10 @@
                     
                     {% if profile.site_web %}
                     <div class="mb-3">
-                        <label class="form-label text-muted">Site web</label>
+                        <label class="form-label text-muted">{% trans "Site web" %}</label>
                         <p class="mb-0">
                             <a href="{{ profile.site_web }}" target="_blank" class="text-primary">
-                                <i class="fas fa-external-link-alt me-1"></i>Visiter
+                                <i class="fas fa-external-link-alt me-1"></i>{% trans "Visiter" %}
                             </a>
                         </p>
                     </div>
@@ -141,13 +142,13 @@
             {% if user|user_role == 'lecteur' %}
             <div class="status-card {% if profile.demande_auteur_statut == 'en_attente' %}pending{% elif profile.demande_auteur_statut == 'acceptee' %}approved{% elif profile.demande_auteur_statut == 'refusee' %}rejected{% endif %}">
                 <h6>
-                    <i class="fas fa-star me-2"></i>Statut Auteur
+                    <i class="fas fa-star me-2"></i>{% trans "Statut Auteur" %}
                 </h6>
                 
                 {% if profile.demande_auteur_statut == 'aucune' %}
-                <p class="text-muted mb-3">Vous êtes actuellement lecteur. Souhaitez-vous devenir auteur pour publier des articles ?</p>
+                <p class="text-muted mb-3">{% trans "Vous êtes actuellement lecteur. Souhaitez-vous devenir auteur pour publier des articles ?" %}</p>
                 <a href="{% url 'blog:demander_auteur' %}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>Demander à être auteur
+                    <i class="fas fa-plus me-2"></i>{% trans "Demander à être auteur" %}
                 </a>
                 
                 {% elif profile.demande_auteur_statut == 'en_attente' %}
@@ -155,9 +156,9 @@
                     <div class="d-flex align-items-center">
                         <i class="fas fa-clock fa-2x me-3"></i>
                         <div>
-                            <strong>Demande en cours</strong><br>
-                            <small>Envoyée le {{ profile.demande_auteur_date|date:"d/m/Y à H:i" }}</small><br>
-                            <small class="text-muted">Un administrateur examinera votre demande sous peu.</small>
+                            <strong>{% trans "Demande en cours" %}</strong><br>
+                            <small>{% trans "Envoyée le" %} {{ profile.demande_auteur_date|date:"d/m/Y à H:i" }}</small><br>
+                            <small class="text-muted">{% trans "Un administrateur examinera votre demande sous peu." %}</small>
                         </div>
                     </div>
                 </div>
@@ -167,8 +168,8 @@
                     <div class="d-flex align-items-center">
                         <i class="fas fa-check-circle fa-2x me-3"></i>
                         <div>
-                            <strong>Demande acceptée !</strong><br>
-                            <small>Le {{ profile.admin_reponse_date|date:"d/m/Y à H:i" }}</small><br>
+                            <strong>{% trans "Demande acceptée !" %}</strong><br>
+                            <small>{% trans "Le" %} {{ profile.admin_reponse_date|date:"d/m/Y à H:i" }}</small><br>
                             {% if profile.admin_reponse %}
                             <small class="text-muted">{{ profile.admin_reponse }}</small>
                             {% endif %}
@@ -181,8 +182,8 @@
                     <div class="d-flex align-items-center">
                         <i class="fas fa-times-circle fa-2x me-3"></i>
                         <div>
-                            <strong>Demande refusée</strong><br>
-                            <small>Le {{ profile.admin_reponse_date|date:"d/m/Y à H:i" }}</small><br>
+                            <strong>{% trans "Demande refusée" %}</strong><br>
+                            <small>{% trans "Le" %} {{ profile.admin_reponse_date|date:"d/m/Y à H:i" }}</small><br>
                             {% if profile.admin_reponse %}
                             <small class="text-muted">{{ profile.admin_reponse }}</small>
                             {% endif %}
@@ -190,7 +191,7 @@
                     </div>
                 </div>
                 <a href="{% url 'blog:demander_auteur' %}" class="btn btn-outline-primary">
-                    <i class="fas fa-redo me-2"></i>Faire une nouvelle demande
+                    <i class="fas fa-redo me-2"></i>{% trans "Faire une nouvelle demande" %}
                 </a>
                 {% endif %}
             </div>
@@ -203,10 +204,10 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5>
                     <i class="fas fa-newspaper me-2"></i>
-                    Mes articles ({{ mes_articles.count }})
+                    {% trans "Mes articles" %} ({{ mes_articles.count }})
                 </h5>
                 <a href="{% url 'blog:ajouter_article' %}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>Nouvel article
+                    <i class="fas fa-plus me-2"></i>{% trans "Nouvel article" %}
                 </a>
             </div>
 
@@ -234,7 +235,7 @@
                                         <a href="{% url 'blog:modifier_article' article.id %}" class="btn btn-outline-secondary">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{% url 'blog:supprimer_article' article.id %}" class="btn btn-outline-danger" onclick="return confirm('Supprimer cet article ?')">
+                                        <a href="{% url 'blog:supprimer_article' article.id %}" class="btn btn-outline-danger" onclick="return confirm('{% trans "Supprimer cet article ?" %}')">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </div>
@@ -248,10 +249,10 @@
             {% else %}
             <div class="text-center text-muted py-5">
                 <i class="fas fa-newspaper fa-3x mb-3"></i>
-                <h5>Aucun article publié</h5>
-                <p>Commencez à partager vos idées avec le monde !</p>
+                <h5>{% trans "Aucun article publié" %}</h5>
+                <p>{% trans "Commencez à partager vos idées avec le monde !" %}</p>
                 <a href="{% url 'blog:ajouter_article' %}" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>Créer mon premier article
+                    <i class="fas fa-plus me-2"></i>{% trans "Créer mon premier article" %}
                 </a>
             </div>
             {% endif %}
@@ -260,10 +261,10 @@
             <!-- Message pour les lecteurs -->
             <div class="text-center text-muted py-5">
                 <i class="fas fa-book-reader fa-3x mb-3"></i>
-                <h5>Espace de lecture</h5>
-                <p>Découvrez et commentez les articles de notre communauté !</p>
+                <h5>{% trans "Espace de lecture" %}</h5>
+                <p>{% trans "Découvrez et commentez les articles de notre communauté !" %}</p>
                 <a href="{% url 'blog:home' %}" class="btn btn-primary">
-                    <i class="fas fa-home me-2"></i>Parcourir les articles
+                    <i class="fas fa-home me-2"></i>{% trans "Parcourir les articles" %}
                 </a>
             </div>
             {% endif %}

@@ -7,7 +7,7 @@ from .models import Article, Commentaire, Categorie, UserProfile
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['titre', 'contenu', 'categorie', 'images']
+        fields = ['titre', 'contenu', 'categorie', 'langue', 'images']
         widgets = {
             'titre': forms.TextInput(attrs={
                 'placeholder': 'Titre de l\'article', 
@@ -19,6 +19,9 @@ class ArticleForm(forms.ModelForm):
                 'class': 'form-control'
             }),
             'categorie': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'langue': forms.Select(attrs={
                 'class': 'form-control'
             }),
             'images': forms.FileInput(attrs={

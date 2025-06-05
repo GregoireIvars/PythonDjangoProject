@@ -1,8 +1,9 @@
 <!-- filepath: c:\Users\frus84312\AppPython\backend\blog\templates\admin\demandes.html -->
 {% extends 'blog/layout.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Administration - Demandes d'auteur{% endblock %}
+{% block title %}{% trans "Administration" %} - {% trans "Demandes d'auteur" %}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
@@ -11,17 +12,17 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="{% url 'blog:admin_panel' %}">
-                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                    <i class="fas fa-tachometer-alt me-1"></i>{% trans "Dashboard" %}
                 </a>
             </li>
-            <li class="breadcrumb-item active">Demandes d'auteur</li>
+            <li class="breadcrumb-item active">{% trans "Demandes d'auteur" %}</li>
         </ol>
     </nav>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>
             <i class="fas fa-user-check text-warning me-2"></i>
-            Demandes d'auteur
+            {% trans "Demandes d'auteur" %}
         </h2>
     </div>
 
@@ -30,7 +31,7 @@
         <div class="card-header bg-warning text-dark">
             <h5 class="card-title mb-0">
                 <i class="fas fa-clock me-2"></i>
-                En attente de validation ({{ demandes_en_attente.count }})
+                {% blocktrans count counter=demandes_en_attente.count %}En attente de validation ({{ counter }}){% plural %}En attente de validation ({{ counter }}){% endblocktrans %}
             </h5>
         </div>
         <div class="card-body">
@@ -47,14 +48,14 @@
                         <p class="text-muted mb-2">
                             <i class="fas fa-envelope me-1"></i>{{ demande.user.email }}
                             <span class="mx-2">•</span>
-                            <i class="fas fa-calendar me-1"></i>Inscrit le {{ demande.user.date_joined|date:"d/m/Y" }}
+                            <i class="fas fa-calendar me-1"></i>{% trans "Inscrit le" %} {{ demande.user.date_joined|date:"d/m/Y" }}
                             <span class="mx-2">•</span>
-                            <i class="fas fa-clock me-1"></i>Demande du {{ demande.demande_auteur_date|date:"d/m/Y à H:i" }}
+                            <i class="fas fa-clock me-1"></i>{% trans "Demande du" %} {{ demande.demande_auteur_date|date:"d/m/Y à H:i" }}
                         </p>
                         
                         {% if demande.demande_auteur_message %}
                         <div class="alert alert-light">
-                            <strong>Message de motivation :</strong><br>
+                            <strong>{% trans "Message de motivation" %} :</strong><br>
                             {{ demande.demande_auteur_message|linebreaksbr }}
                         </div>
                         {% endif %}
@@ -63,15 +64,15 @@
                         <form method="post" action="{% url 'blog:traiter_demande_auteur' demande.user.id %}">
                             {% csrf_token %}
                             <div class="mb-3">
-                                <label for="reponse_{{ demande.user.id }}" class="form-label">Réponse (optionnel)</label>
-                                <textarea name="reponse" id="reponse_{{ demande.user.id }}" class="form-control" rows="2" placeholder="Message pour l'utilisateur..."></textarea>
+                                <label for="reponse_{{ demande.user.id }}" class="form-label">{% trans "Réponse (optionnel)" %}</label>
+                                <textarea name="reponse" id="reponse_{{ demande.user.id }}" class="form-control" rows="2" placeholder="{% trans 'Message pour l\'utilisateur...' %}"></textarea>
                             </div>
                             <div class="d-grid gap-2">
                                 <button type="submit" name="action" value="accepter" class="btn btn-success">
-                                    <i class="fas fa-check me-2"></i>Accepter
+                                    <i class="fas fa-check me-2"></i>{% trans "Accepter" %}
                                 </button>
                                 <button type="submit" name="action" value="refuser" class="btn btn-outline-danger">
-                                    <i class="fas fa-times me-2"></i>Refuser
+                                    <i class="fas fa-times me-2"></i>{% trans "Refuser" %}
                                 </button>
                             </div>
                         </form>
@@ -82,8 +83,8 @@
             {% else %}
             <div class="text-center text-muted py-5">
                 <i class="fas fa-check-circle fa-3x mb-3"></i>
-                <h5>Aucune demande en attente</h5>
-                <p>Toutes les demandes ont été traitées.</p>
+                <h5>{% trans "Aucune demande en attente" %}</h5>
+                <p>{% trans "Toutes les demandes ont été traitées." %}</p>
             </div>
             {% endif %}
         </div>
@@ -95,7 +96,7 @@
         <div class="card-header bg-light">
             <h5 class="card-title mb-0">
                 <i class="fas fa-history me-2"></i>
-                Historique récent
+                {% trans "Historique récent" %}
             </h5>
         </div>
         <div class="card-body">
@@ -103,11 +104,11 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Utilisateur</th>
-                            <th>Date demande</th>
-                            <th>Statut</th>
-                            <th>Réponse admin</th>
-                            <th>Date traitement</th>
+                            <th>{% trans "Utilisateur" %}</th>
+                            <th>{% trans "Date demande" %}</th>
+                            <th>{% trans "Statut" %}</th>
+                            <th>{% trans "Réponse admin" %}</th>
+                            <th>{% trans "Date traitement" %}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -121,11 +122,11 @@
                             <td>
                                 {% if demande.demande_auteur_statut == 'acceptee' %}
                                 <span class="badge bg-success">
-                                    <i class="fas fa-check me-1"></i>Acceptée
+                                    <i class="fas fa-check me-1"></i>{% trans "Acceptée" %}
                                 </span>
                                 {% else %}
                                 <span class="badge bg-danger">
-                                    <i class="fas fa-times me-1"></i>Refusée
+                                    <i class="fas fa-times me-1"></i>{% trans "Refusée" %}
                                 </span>
                                 {% endif %}
                             </td>
@@ -133,7 +134,7 @@
                                 {% if demande.admin_reponse %}
                                 {{ demande.admin_reponse|truncatechars:50 }}
                                 {% else %}
-                                <em class="text-muted">Aucune réponse</em>
+                                <em class="text-muted">{% trans "Aucune réponse" %}</em>
                                 {% endif %}
                             </td>
                             <td>{{ demande.admin_reponse_date|date:"d/m/Y H:i" }}</td>

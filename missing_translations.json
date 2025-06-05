@@ -1,0 +1,28 @@
+{
+  "templates/admin/articles.html": [
+    "@{{ article.auteur.username }}"
+  ],
+  "templates/admin/demandes.html": [
+    "({{ demande.user.username }})"
+  ],
+  "templates/admin/utilisateurs.html": [
+    "@{{ user.username }}"
+  ],
+  "templates/auth/profile.html": [
+    "@{{ user.username }}",
+    "({{ mes_articles.count }})"
+  ],
+  "templates/blog/articles_par_categorie.html": [
+    ": {{ articles.first.date_publication|date:\"d/m/Y\" }}"
+  ],
+  "templates/blog/detail_article.html": [
+    ": {{ article.date_modification|date:\"d/m/Y à H:i\" }}",
+    "({{ commentaires.count }})",
+    "\"{{ article.titre }}\""
+  ],
+  "templates/blog/home.html": [
+    "🇫🇷 Français",
+    "🇬🇧 English",
+    "🇪🇸 Español"
+  ]
+}

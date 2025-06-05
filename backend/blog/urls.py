@@ -12,11 +12,15 @@ urlpatterns = [
     path('ajouter/', views.ajouter_article, name='ajouter_article'),
     path('modifier/<int:article_id>/', views.modifier_article, name='modifier_article'),
     path('supprimer/<int:article_id>/', views.supprimer_article, name='supprimer_article'),
+    path('generer-ai/', views.generer_article_ai, name='generer_article_ai'),  # Nouvelle URL pour IA
     
     # Catégories
     path('categories/', views.liste_categories, name='liste_categories'),
     path('categorie/<int:categorie_id>/', views.articles_par_categorie, name='articles_par_categorie'),
     path('ajouter-categorie/', views.ajouter_categorie, name='ajouter_categorie'),
+    
+    # Filtrage par langue
+    path('articles/langue/<str:langue_code>/', views.articles_par_langue, name='articles_par_langue'),
     
     # Authentification
     path('login/', views.user_login, name='login'),

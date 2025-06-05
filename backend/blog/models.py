@@ -24,6 +24,13 @@ class Categorie(models.Model):
 
 
 class Article(models.Model):
+    # Choix de langues disponibles
+    LANGUE_CHOICES = [
+        ('fr', 'Français'),
+        ('en', 'English'),
+        ('es', 'Español'),
+    ]
+    
     titre = models.CharField(max_length=200)
     contenu = models.TextField()
     auteur = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles')  # Modifié pour utiliser User
@@ -31,6 +38,7 @@ class Article(models.Model):
     date_modification = models.DateTimeField(auto_now=True)
     categorie = models.ForeignKey(Categorie, on_delete=models.SET_NULL, null=True, blank=True, related_name="articles")
     images = models.ImageField(upload_to='articles/', null=True, blank=True)
+    langue = models.CharField(max_length=2, choices=LANGUE_CHOICES, default='fr', verbose_name="Langue de l'article")
 
     class Meta:
         verbose_name = 'Article'

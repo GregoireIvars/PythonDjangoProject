@@ -1,6 +1,7 @@
 {% extends 'blog/layout.html' %}
+{% load i18n %}
 
-{% block title %}Articles - {{ categorie.nom }} - Mon Blog Django{% endblock %}
+{% block title %}{% trans "Articles" %} - {{ categorie.nom }} - {% trans "Mon Blog Django" %}{% endblock %}
 
 {% block content %}
 <div class="fade-in">
@@ -9,12 +10,12 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="{% url 'blog:home' %}">
-                    <i class="fas fa-home me-1"></i>Accueil
+                    <i class="fas fa-home me-1"></i>{% trans "Accueil" %}
                 </a>
             </li>
             <li class="breadcrumb-item">
                 <a href="{% url 'blog:liste_categories' %}">
-                    <i class="fas fa-tags me-1"></i>Catégories
+                    <i class="fas fa-tags me-1"></i>{% trans "Catégories" %}
                 </a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
@@ -37,16 +38,16 @@
             <div class="stat-item">
                 <i class="fas fa-newspaper"></i>
                 <strong>{{ articles.count }}</strong> 
-                article{{ articles.count|pluralize }}
+                {% blocktrans count counter=articles.count %}article{% plural %}articles{% endblocktrans %}
             </div>
             <div class="stat-item">
                 <i class="fas fa-calendar"></i>
-                Créée le {{ categorie.date_creation|date:"d/m/Y" }}
+                {% trans "Créée le" %} {{ categorie.date_creation|date:"d/m/Y" }}
             </div>
             {% if articles %}
                 <div class="stat-item">
                     <i class="fas fa-clock"></i>
-                    Dernier article : {{ articles.first.date_publication|date:"d/m/Y" }}
+                    {% trans "Dernier article" %} : {{ articles.first.date_publication|date:"d/m/Y" }}
                 </div>
             {% endif %}
         </div>
@@ -66,12 +67,12 @@
                                 <h5 class="card-title">{{ article.titre }}</h5>
                                 <p class="card-text">{{ article.contenu|truncatechars:100 }}</p>
                                 <small class="text-muted">
-                                    Par {{ article.auteur.first_name|default:article.auteur.username }} - {{ article.date_publication|date:"d/m/Y" }}
+                                    {% trans "Par" %} {{ article.auteur.first_name|default:article.auteur.username }} - {{ article.date_publication|date:"d/m/Y" }}
                                 </small>
                             </div>
                             <div class="card-footer">
                                 <a href="{% url 'blog:detail_article' article.id %}" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-eye me-1"></i>Lire l'article
+                                    <i class="fas fa-eye me-1"></i>{% trans "Lire l'article" %}
                                 </a>
                             </div>
                         </article>
@@ -83,13 +84,13 @@
         <!-- Actions supplémentaires -->
         <div class="action-buttons">
             <h4 class="mb-3">
-                <i class="fas fa-plus-circle me-2"></i>Ajouter du contenu
+                <i class="fas fa-plus-circle me-2"></i>{% trans "Ajouter du contenu" %}
             </h4>
             <a href="{% url 'blog:ajouter_article' %}" class="btn btn-success me-3">
-                <i class="fas fa-plus me-1"></i>Nouvel article dans {{ categorie.nom }}
+                <i class="fas fa-plus me-1"></i>{% trans "Nouvel article dans" %} {{ categorie.nom }}
             </a>
             <a href="{% url 'blog:liste_categories' %}" class="btn btn-outline-primary">
-                <i class="fas fa-arrow-left me-1"></i>Retour aux catégories
+                <i class="fas fa-arrow-left me-1"></i>{% trans "Retour aux catégories" %}
             </a>
         </div>
         
@@ -99,17 +100,19 @@
             <div class="empty-icon">
                 <i class="fas fa-folder-open"></i>
             </div>
-            <h3 class="mb-3">Aucun article dans cette catégorie</h3>
+            <h3 class="mb-3">{% trans "Aucun article dans cette catégorie" %}</h3>
             <p class="text-muted mb-4">
-                La catégorie "{{ categorie.nom }}" ne contient pas encore d'articles. 
+                {% blocktrans with category_name=categorie.nom %}
+                La catégorie "{{ category_name }}" ne contient pas encore d'articles. 
                 Commencez par créer votre premier article !
+                {% endblocktrans %}
             </p>
             <div>
                 <a href="{% url 'blog:ajouter_article' %}" class="btn btn-primary me-3">
-                    <i class="fas fa-plus me-1"></i>Créer le premier article
+                    <i class="fas fa-plus me-1"></i>{% trans "Créer le premier article" %}
                 </a>
                 <a href="{% url 'blog:liste_categories' %}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>Retour aux catégories
+                    <i class="fas fa-arrow-left me-1"></i>{% trans "Retour aux catégories" %}
                 </a>
             </div>
         </div>

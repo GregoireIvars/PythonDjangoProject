@@ -1,0 +1,1224 @@
+# Translation file for Django project
+# Copyright (C) 2025
+# This file is distributed under the same license as the PACKAGE package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Django Blog\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-04 16:45+"PO-Revision-Date: 2025-06-04 15:19+0000\n"
+"Last-Translator: Automatic\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: backend/blog/templates/admin/articles.html:14
+#: backend/blog/templates/admin/demandes.html:15
+#: backend/blog/templates/admin/panel.html:7
+#: backend/blog/templates/admin/utilisateurs.html:15
+#: backend/blog/templates/blog/layout.html:120
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: backend/blog/templates/admin/articles.html:17
+#: backend/blog/templates/admin/panel.html:109
+#: backend/blog/templates/blog/articles_par_categorie.html:4
+#: backend/blog/templates/blog/home.html:48
+#: backend/blog/templates/blog/layout.html:136
+msgid "Articles"
+msgstr "Articles"
+
+#: backend/blog/templates/admin/articles.html:23
+msgid "Gestion des articles"
+msgstr "Article Management"
+
+#: backend/blog/templates/admin/articles.html:29
+msgid "Rechercher par auteur..."
+msgstr "Search by author..."
+
+#: backend/blog/templates/admin/articles.html:47
+msgid "Total articles"
+msgstr "Total articles"
+
+#: backend/blog/templates/admin/articles.html:54
+msgid "Affichés"
+msgstr "Displayed"
+
+#: backend/blog/templates/admin/articles.html:62
+#: backend/blog/templates/blog/articles_par_categorie.html:18
+#: backend/blog/templates/blog/layout.html:98
+#: backend/blog/templates/blog/layout.html:141
+msgid "Catégories"
+msgstr "Categories"
+
+#: backend/blog/templates/admin/articles.html:70
+#: backend/blog/templates/admin/articles.html:88
+#: backend/blog/templates/admin/panel.html:121
+#: backend/blog/templates/blog/detail_article.html:65
+#: backend/blog/templates/blog/home.html:66
+msgid "Commentaires"
+msgstr "Comments"
+
+#: backend/blog/templates/admin/articles.html:83
+msgid "Image"
+msgstr "Image"
+
+#: backend/blog/templates/admin/articles.html:84
+#: backend/blog/templates/blog/ajouter_article.html:28
+#: backend/blog/templates/blog/modifier_article.html:15
+msgid "Titre"
+msgstr "Title"
+
+#: backend/blog/templates/admin/articles.html:85
+#: backend/blog/templates/blog/detail_article.html:127
+#: backend/blog/templates/blog/modifier_article.html:25
+msgid "Auteur"
+msgstr "Author"
+
+#: backend/blog/templates/admin/articles.html:86
+#: backend/blog/templates/blog/ajouter_article.html:38
+#: backend/blog/templates/blog/detail_article.html:130
+#: backend/blog/templates/blog/modifier_article.html:44
+msgid "Catégorie"
+msgstr "Category"
+
+#: backend/blog/templates/admin/articles.html:87
+msgid "Langue"
+msgstr "Language"
+
+#: backend/blog/templates/admin/articles.html:89
+msgid "Publication"
+msgstr "Publication"
+
+#: backend/blog/templates/admin/articles.html:90
+#: backend/blog/templates/admin/utilisateurs.html:57
+#: backend/blog/templates/admin/utilisateurs.html:100
+msgid "Actions"
+msgstr "Actions"
+
+#: backend/blog/templates/admin/articles.html:122
+msgid "Sans catégorie"
+msgstr "No category"
+
+#: backend/blog/templates/admin/articles.html:135
+msgid "commentaire"
+msgstr "comment"
+
+#: backend/blog/templates/admin/articles.html:144
+msgid "Modifié"
+msgstr "Modified"
+
+#: backend/blog/templates/admin/articles.html:149
+msgid "Voir l'article"
+msgstr "View"
+
+#: backend/blog/templates/admin/articles.html:152
+#: backend/blog/templates/blog/detail_article.html:55
+msgid "Modifier"
+msgstr "Edit"
+
+#: backend/blog/templates/admin/articles.html:155
+#: backend/blog/templates/blog/detail_article.html:58
+msgid "Supprimer"
+msgstr "Delete"
+
+#: backend/blog/templates/admin/articles.html:155
+#: backend/blog/templates/auth/profile.html:238
+msgid "Supprimer cet article ?"
+msgstr "Delete this article?"
+
+#: backend/blog/templates/admin/articles.html:167
+msgid "Aucun article trouvé"
+msgstr "No articles found"
+
+#: backend/blog/templates/admin/articles.html:169
+#, python-format
+msgid "Aucun article trouvé pour l'auteur \"%(auteur)s\"."
+msgstr "No articles found for author \"%(auteur)s\"."
+
+#: backend/blog/templates/admin/articles.html:171
+msgid "Voir tous les articles"
+msgstr "View all articles"
+
+#: backend/blog/templates/admin/articles.html:174
+msgid "Aucun article n'a encore été publié."
+msgstr "No articles have been published yet."
+
+#: backend/blog/templates/admin/demandes.html:6
+#: backend/blog/templates/admin/panel.html:7
+#: backend/blog/templates/admin/utilisateurs.html:6
+#: backend/blog/templates/blog/layout.html:116
+msgid "Administration"
+msgstr "Administration"
+
+#: backend/blog/templates/admin/demandes.html:6
+#: backend/blog/templates/admin/demandes.html:18
+#: backend/blog/templates/admin/demandes.html:25
+#: backend/blog/templates/admin/panel.html:148
+#, fuzzy
+#| msgid "Demandes auteur"
+msgid "Demandes d'auteur"
+msgstr "Author requests"
+
+#: backend/blog/templates/admin/demandes.html:34
+#, python-format
+msgid "Inscrit le"
+msgstr "Register"
+
+#: backend/blog/templates/admin/demandes.html:53
+#, fuzzy
+#| msgid "Demandes auteur"
+msgid "Demande du"
+msgstr "Author requests"
+
+#: backend/blog/templates/admin/demandes.html:58
+msgid "Message de motivation"
+msgstr "Motivation message"
+
+#: backend/blog/templates/admin/demandes.html:67
+#, fuzzy
+#| msgid "Image (optionnelle)"
+msgid "Réponse (optionnel)"
+msgstr "Response (optional)"
+
+#: backend/blog/templates/admin/demandes.html:68
+msgid "Message pour l'utilisateur"
+msgstr "Message for the user"
+
+#: backend/blog/templates/admin/demandes.html:72
+msgid "Accepter"
+msgstr "Accept"
+
+#: backend/blog/templates/admin/demandes.html:75
+msgid "Refuser"
+msgstr "Reject"
+
+#: backend/blog/templates/admin/demandes.html:86
+#: backend/blog/templates/admin/panel.html:176
+msgid "Aucune demande en attente"
+msgstr "No pending requests"
+
+#: backend/blog/templates/admin/demandes.html:87
+msgid "Toutes les demandes ont été traitées."
+msgstr "All requests have been processed."
+
+#: backend/blog/templates/admin/demandes.html:99
+msgid "Historique récent"
+msgstr "Recent history"
+
+#: backend/blog/templates/admin/demandes.html:107
+#: backend/blog/templates/admin/utilisateurs.html:52
+#, fuzzy
+#| msgid "Utilisateurs"
+msgid "Utilisateur"
+msgstr "Users"
+
+#: backend/blog/templates/admin/demandes.html:108
+#, fuzzy
+#| msgid "Date de création"
+msgid "Date demande"
+msgstr "Creation date"
+
+#: backend/blog/templates/admin/demandes.html:109
+#, fuzzy
+#| msgid "Auteur"
+msgid "Statut"
+msgstr "Author"
+
+#: backend/blog/templates/admin/demandes.html:110
+msgid "Réponse admin"
+msgstr ""
+
+#: backend/blog/templates/admin/demandes.html:111
+msgid "Date traitement"
+msgstr ""
+
+#: backend/blog/templates/admin/demandes.html:125
+#: backend/blog/templates/admin/utilisateurs.html:89
+msgid "Acceptée"
+msgstr "Accepted"
+
+#: backend/blog/templates/admin/demandes.html:129
+#: backend/blog/templates/admin/utilisateurs.html:91
+msgid "Refusée"
+msgstr "Rejected"
+
+#: backend/blog/templates/admin/demandes.html:137
+msgid "Aucune réponse"
+msgstr "No response"
+
+#: backend/blog/templates/admin/panel.html:71
+msgid "Dashboard Administrateur"
+msgstr "Admin Dashboard"
+
+#: backend/blog/templates/admin/panel.html:74
+#, python-format
+msgid "Bienvenue %(username)s, gérez votre plateforme efficacement."
+msgstr ""
+
+#: backend/blog/templates/admin/panel.html:80
+#, fuzzy
+#| msgid "Demandes auteur"
+msgid "Demandes"
+msgstr "Author requests"
+
+#: backend/blog/templates/admin/panel.html:97
+#: backend/blog/templates/admin/utilisateurs.html:18
+#: backend/blog/templates/blog/layout.html:130
+msgid "Utilisateurs"
+msgstr "Users"
+
+#: backend/blog/templates/admin/panel.html:133
+#, fuzzy
+#| msgid "Auteur"
+msgid "Auteurs"
+msgstr "Authors"
+
+#: backend/blog/templates/admin/panel.html:151
+#, fuzzy
+#| msgid "Voir l'article"
+msgid "Voir tout"
+msgstr "View"
+
+#: backend/blog/templates/admin/panel.html:162
+msgid "ago"
+msgstr "ago"
+
+#: backend/blog/templates/admin/panel.html:188
+#, fuzzy
+#| msgid "Articles"
+msgid "Articles récents"
+msgstr "Recent articles"
+
+#: backend/blog/templates/admin/panel.html:191
+msgid "Gérer"
+msgstr "Manage"
+
+#: backend/blog/templates/admin/panel.html:202
+msgid "par"
+msgstr "by"
+
+#: backend/blog/templates/admin/panel.html:216
+#: backend/blog/templates/auth/profile.html:252
+#, fuzzy
+#| msgid "Aucun article trouvé"
+msgid "Aucun article publié"
+msgstr "No articles found"
+
+#: backend/blog/templates/admin/panel.html:227
+#, fuzzy
+#| msgid "Actions"
+msgid "Actions rapides"
+msgstr "Quick actions"
+
+#: backend/blog/templates/admin/panel.html:233
+#, fuzzy
+#| msgid "Utilisateurs"
+msgid "Gérer Utilisateurs"
+msgstr "Manage Users"
+
+#: backend/blog/templates/admin/panel.html:239
+#, fuzzy
+#| msgid "Catégories"
+msgid "Gérer Catégories"
+msgstr "Manage Categories"
+
+#: backend/blog/templates/admin/panel.html:245
+#, fuzzy
+#| msgid "Catégorie"
+msgid "Nouvelle Catégorie"
+msgstr "Category"
+
+#: backend/blog/templates/admin/panel.html:251
+#, fuzzy
+#| msgid "Voir l'article"
+msgid "Voir le Site"
+msgstr "View"
+
+#: backend/blog/templates/admin/utilisateurs.html:6
+#, fuzzy
+#| msgid "Nom d'utilisateur"
+msgid "Gestion utilisateurs"
+msgstr "Username"
+
+#: backend/blog/templates/admin/utilisateurs.html:25
+#, fuzzy
+#| msgid "Gestion des articles"
+msgid "Gestion des utilisateurs"
+msgstr "Article Management"
+
+#: backend/blog/templates/admin/utilisateurs.html:33
+#: backend/blog/templates/admin/utilisateurs.html:36
+#, fuzzy
+#| msgid "Toutes les langues"
+msgid "Tous les rôles"
+msgstr "All languages"
+
+#: backend/blog/templates/admin/utilisateurs.html:53
+#: backend/blog/templates/auth/edit_profile.html:49
+#: backend/blog/templates/auth/profile.html:103
+#: backend/blog/templates/auth/signup.html:39
+msgid "Email"
+msgstr "Email"
+
+#: backend/blog/templates/admin/utilisateurs.html:54
+msgid "Rôle actuel"
+msgstr ""
+
+#: backend/blog/templates/admin/utilisateurs.html:55
+#: backend/blog/templates/auth/signup.html:5
+#: backend/blog/templates/blog/layout.html:193
+msgid "Inscription"
+msgstr "Register"
+
+#: backend/blog/templates/admin/utilisateurs.html:56
+msgid "Statut demande"
+msgstr ""
+
+#: backend/blog/templates/admin/utilisateurs.html:87
+msgid "En attente"
+msgstr ""
+
+#: backend/blog/templates/admin/utilisateurs.html:93
+msgid "Aucune"
+msgstr ""
+
+#: backend/blog/templates/admin/utilisateurs.html:103
+msgid "Changer le rôle"
+msgstr ""
+
+#: backend/blog/templates/admin/utilisateurs.html:110
+#, python-format
+msgid "Changer le rôle de %(username)s vers %(role_label)s ?"
+msgstr ""
+
+#: backend/blog/templates/admin/utilisateurs.html:120
+msgid "Vous"
+msgstr ""
+
+#: backend/blog/templates/admin/utilisateurs.html:128
+msgid "Aucun utilisateur trouvé avec ce filtre."
+msgstr ""
+
+#: backend/blog/templates/auth/demande_auteur.html:6
+#, fuzzy
+#| msgid "Demander à être auteur"
+msgid "Demander à devenir auteur"
+msgstr "Request to become an author"
+
+#: backend/blog/templates/auth/demande_auteur.html:16
+#: backend/blog/templates/blog/layout.html:175
+#, fuzzy
+#| msgid "Auteur"
+msgid "Devenir Auteur"
+msgstr "Author"
+
+#: backend/blog/templates/auth/demande_auteur.html:18
+#, fuzzy
+#| msgid "Découvrez et commentez les articles de notre communauté !"
+msgid "Partagez vos connaissances avec notre communauté"
+msgstr "Discover and comment on our community's articles!"
+
+#: backend/blog/templates/auth/demande_auteur.html:26
+msgid "Qu'est-ce qu'un auteur ?"
+msgstr ""
+
+#: backend/blog/templates/auth/demande_auteur.html:29
+#, fuzzy
+#| msgid "Créer le premier article"
+msgid "Créer et publier des articles"
+msgstr "Create my first article"
+
+#: backend/blog/templates/auth/demande_auteur.html:30
+msgid "Modifier et supprimer vos propres articles"
+msgstr ""
+
+#: backend/blog/templates/auth/demande_auteur.html:31
+msgid "Commenter et interagir avec la communauté"
+msgstr ""
+
+#: backend/blog/templates/auth/demande_auteur.html:32
+msgid "Accès à des outils de rédaction avancés"
+msgstr ""
+
+#: backend/blog/templates/auth/demande_auteur.html:58
+msgid "Processus de validation"
+msgstr ""
+
+#: backend/blog/templates/auth/demande_auteur.html:59
+msgid "1. Votre demande sera examinée par un administrateur"
+msgstr ""
+
+#: backend/blog/templates/auth/demande_auteur.html:60
+msgid "2. Vous recevrez une réponse dans votre profil"
+msgstr ""
+
+#: backend/blog/templates/auth/demande_auteur.html:61
+msgid "3. En cas d'acceptation, vous pourrez immédiatement créer des articles"
+msgstr ""
+
+#: backend/blog/templates/auth/demande_auteur.html:68
+msgid "Envoyer ma demande"
+msgstr ""
+
+#: backend/blog/templates/auth/demande_auteur.html:75
+#: backend/blog/templates/auth/edit_profile.html:13
+msgid "Retour au profil"
+msgstr ""
+
+#: backend/blog/templates/auth/edit_profile.html:4
+#: backend/blog/templates/auth/edit_profile.html:11
+#, fuzzy
+#| msgid "Modifier"
+msgid "Modifier mon profil"
+msgstr "Edit"
+
+#: backend/blog/templates/auth/edit_profile.html:4
+#: backend/blog/templates/blog/ajouter_article.html:4
+#: backend/blog/templates/blog/ajouter_categorie.html:4
+#: backend/blog/templates/blog/articles_par_categorie.html:4
+#: backend/blog/templates/blog/liste_categories.html:4
+#: backend/blog/templates/blog/modifier_article.html:4
+#, fuzzy
+#| msgid "Mon Blog"
+msgid "Mon Blog Django"
+msgstr "My Blog"
+
+#: backend/blog/templates/auth/edit_profile.html:23
+#, fuzzy
+#| msgid "Inscription"
+msgid "Informations personnelles"
+msgstr "Personal information"
+
+#: backend/blog/templates/auth/edit_profile.html:29
+#: backend/blog/templates/auth/signup.html:53
+msgid "Prénom"
+msgstr "First name"
+
+#: backend/blog/templates/auth/edit_profile.html:38
+#: backend/blog/templates/auth/signup.html:65
+#: backend/blog/templates/blog/ajouter_categorie.html:15
+msgid "Nom"
+msgstr "Last name"
+
+#: backend/blog/templates/auth/edit_profile.html:62
+msgid "Profil public"
+msgstr "Public profile"
+
+#: backend/blog/templates/auth/edit_profile.html:67
+#: backend/blog/templates/auth/profile.html:114
+msgid "Biographie"
+msgstr "Biography"
+
+#: backend/blog/templates/auth/edit_profile.html:70
+msgid "Quelques mots sur vous (optionnel)"
+msgstr "A few words about you (optional)"
+
+#: backend/blog/templates/auth/edit_profile.html:79
+#: backend/blog/templates/auth/profile.html:121
+msgid "Ville"
+msgstr "City"
+
+#: backend/blog/templates/auth/edit_profile.html:88
+#: backend/blog/templates/auth/profile.html:130
+msgid "Site web"
+msgstr "Website"
+
+#: backend/blog/templates/auth/edit_profile.html:99
+#, fuzzy
+#| msgid "Modifier"
+msgid "Photo de profil"
+msgstr "Profile picture"
+
+#: backend/blog/templates/auth/edit_profile.html:102
+msgid "Image JPG/PNG, taille maximale 2MB"
+msgstr "JPG/PNG image, maximum size 2MB"
+
+#: backend/blog/templates/auth/edit_profile.html:112
+#: backend/blog/templates/blog/ajouter_article.html:81
+#: backend/blog/templates/blog/ajouter_categorie.html:38
+#: backend/blog/templates/blog/detail_article.html:172
+#: backend/blog/templates/blog/modifier_article.html:127
+msgid "Annuler"
+msgstr "Cancel"
+
+#: backend/blog/templates/auth/edit_profile.html:115
+#: backend/blog/templates/blog/modifier_article.html:124
+#, fuzzy
+#| msgid "Dernière modification"
+msgid "Enregistrer les modifications"
+msgstr "Save changes"
+
+#: backend/blog/templates/auth/login.html:5
+#: backend/blog/templates/auth/login.html:15
+#: backend/blog/templates/blog/layout.html:189
+msgid "Connexion"
+msgstr "Login"
+
+#: backend/blog/templates/auth/login.html:26
+#: backend/blog/templates/auth/signup.html:27
+msgid "Nom d'utilisateur"
+msgstr "Username"
+
+#: backend/blog/templates/auth/login.html:38
+#: backend/blog/templates/auth/signup.html:79
+msgid "Mot de passe"
+msgstr "Password"
+
+#: backend/blog/templates/auth/login.html:50
+#: backend/blog/templates/auth/signup.html:149
+#: backend/blog/templates/blog/home.html:33
+msgid "Se connecter"
+msgstr "Log in"
+
+#: backend/blog/templates/auth/login.html:56
+msgid "Pas encore de compte ?"
+msgstr "Don't have an account yet?"
+
+#: backend/blog/templates/auth/login.html:58
+#: backend/blog/templates/blog/home.html:36
+msgid "S'inscrire"
+msgstr "Sign up"
+
+#: backend/blog/templates/auth/profile.html:6
+#: backend/blog/templates/blog/layout.html:162
+msgid "Mon Profil"
+msgstr "My Profile"
+
+#: backend/blog/templates/auth/profile.html:86
+#: backend/blog/templates/blog/layout.html:167
+#, fuzzy
+#| msgid "Modifier"
+msgid "Modifier profil"
+msgstr "Edit"
+
+#: backend/blog/templates/auth/profile.html:98
+#: backend/blog/templates/blog/detail_article.html:124
+#, fuzzy
+#| msgid "Inscription"
+msgid "Informations"
+msgstr "Register"
+
+#: backend/blog/templates/auth/profile.html:108
+msgid "Membre depuis"
+msgstr "Member since"
+
+#: backend/blog/templates/auth/profile.html:133
+msgid "Visiter"
+msgstr "Visit"
+
+#: backend/blog/templates/auth/profile.html:145
+#, fuzzy
+#| msgid "Auteur"
+msgid "Statut Auteur"
+msgstr "Author"
+
+#: backend/blog/templates/auth/profile.html:149
+msgid ""
+"Vous êtes actuellement lecteur. Souhaitez-vous devenir auteur pour publier "
+"des articles ?"
+msgstr ""
+"You are currently a reader. Would you like to become an author to publish "
+"articles?"
+
+#: backend/blog/templates/auth/profile.html:151
+msgid "Demander à être auteur"
+msgstr "Request to become an author"
+
+#: backend/blog/templates/auth/profile.html:159
+msgid "Demande en cours"
+msgstr "Request pending"
+
+#: backend/blog/templates/auth/profile.html:160
+msgid "Envoyée le"
+msgstr "Sent on"
+
+#: backend/blog/templates/auth/profile.html:161
+msgid "Un administrateur examinera votre demande sous peu."
+msgstr "An administrator will review your request shortly."
+
+#: backend/blog/templates/auth/profile.html:171
+msgid "Demande acceptée !"
+msgstr "Request accepted!"
+
+#: backend/blog/templates/auth/profile.html:172
+#: backend/blog/templates/auth/profile.html:186
+msgid "Le"
+msgstr "On"
+
+#: backend/blog/templates/auth/profile.html:185
+msgid "Demande refusée"
+msgstr "Request rejected"
+
+#: backend/blog/templates/auth/profile.html:194
+msgid "Faire une nouvelle demande"
+msgstr "Make a new request"
+
+#: backend/blog/templates/auth/profile.html:207
+#, fuzzy
+#| msgid "Articles"
+msgid "Mes articles"
+msgstr "Articles"
+
+#: backend/blog/templates/auth/profile.html:210
+#, fuzzy
+#| msgid "Total articles"
+msgid "Nouvel article"
+msgstr "Total articles"
+
+#: backend/blog/templates/auth/profile.html:253
+msgid "Commencez à partager vos idées avec le monde !"
+msgstr "Start sharing your ideas with the world!"
+
+#: backend/blog/templates/auth/profile.html:255
+#, fuzzy
+#| msgid "Créer le premier article"
+msgid "Créer mon premier article"
+msgstr "Create my first article"
+
+#: backend/blog/templates/auth/profile.html:264
+msgid "Espace de lecture"
+msgstr "Reading space"
+
+#: backend/blog/templates/auth/profile.html:265
+msgid "Découvrez et commentez les articles de notre communauté !"
+msgstr "Discover and comment on our community's articles!"
+
+#: backend/blog/templates/auth/profile.html:267
+#, fuzzy
+#| msgid "Voir tous les articles"
+msgid "Parcourir les articles"
+msgstr "View all articles"
+
+#: backend/blog/templates/auth/signup.html:15
+msgid "Rejoignez notre communauté"
+msgstr "Join our community"
+
+#: backend/blog/templates/auth/signup.html:17
+msgid "Créez votre compte et commencez à partager"
+msgstr "Create your account and start sharing"
+
+#: backend/blog/templates/auth/signup.html:91
+msgid "Confirmez le mot de passe"
+msgstr "Confirm password"
+
+#: backend/blog/templates/auth/signup.html:107
+msgid "Souhaitez-vous devenir auteur ?"
+msgstr "Would you like to become an author?"
+
+#: backend/blog/templates/auth/signup.html:141
+#, fuzzy
+#| msgid "Créer un Article"
+msgid "Créer mon compte"
+msgstr "Create my account"
+
+#: backend/blog/templates/auth/signup.html:147
+msgid "Déjà un compte ?"
+msgstr "Already have an account?"
+
+#: backend/blog/templates/blog/ajouter_article.html:4
+#: backend/blog/templates/blog/ajouter_article.html:12
+#, fuzzy
+#| msgid "Créer un Article"
+msgid "Ajouter un article"
+msgstr "Create an Article"
+
+#: backend/blog/templates/blog/ajouter_article.html:11
+#: backend/blog/templates/blog/articles_par_categorie.html:13
+#: backend/blog/templates/blog/detail_article.html:12
+#: backend/blog/templates/blog/home.html:6
+#: backend/blog/templates/blog/layout.html:91
+msgid "Accueil"
+msgstr "Home"
+
+#: backend/blog/templates/blog/ajouter_article.html:20
+#, fuzzy
+#| msgid "Créer un Article"
+msgid "Ajouter un Article"
+msgstr "Create an Article"
+
+#: backend/blog/templates/blog/ajouter_article.html:48
+#: backend/blog/templates/blog/modifier_article.html:54
+#, fuzzy
+#| msgid "Lire l'article"
+msgid "Langue de l'article"
+msgstr "Article language"
+
+#: backend/blog/templates/blog/ajouter_article.html:58
+#: backend/blog/templates/blog/modifier_article.html:35
+msgid "Contenu"
+msgstr "Content"
+
+#: backend/blog/templates/blog/ajouter_article.html:68
+msgid "Image (optionnelle)"
+msgstr "Image (optional)"
+
+#: backend/blog/templates/blog/ajouter_article.html:72
+#: backend/blog/templates/blog/modifier_article.html:112
+msgid "Formats acceptés : JPG, PNG, GIF (Max 5MB)"
+msgstr "Accepted formats: JPG, PNG, GIF (Max 5MB)"
+
+#: backend/blog/templates/blog/ajouter_article.html:84
+#, fuzzy
+#| msgid "Voir l'article"
+msgid "Publier l'article"
+msgstr "Publish article"
+
+#: backend/blog/templates/blog/ajouter_categorie.html:4
+#: backend/blog/templates/blog/ajouter_categorie.html:8
+#: backend/blog/templates/blog/liste_categories.html:12
+#, fuzzy
+#| msgid "Créer un Article"
+msgid "Ajouter une catégorie"
+msgstr "Create an Article"
+
+#: backend/blog/templates/blog/ajouter_categorie.html:25
+#, fuzzy
+#| msgid "Inscription"
+msgid "Description"
+msgstr "Register"
+
+#: backend/blog/templates/blog/ajouter_categorie.html:35
+msgid "Enregistrer"
+msgstr ""
+
+#: backend/blog/templates/blog/articles_par_categorie.html:41
+#, fuzzy
+#| msgid "Articles"
+msgid "Créée le"
+msgstr ""
+
+#: backend/blog/templates/blog/articles_par_categorie.html:50
+#, fuzzy
+#| msgid "Derniers Articles"
+msgid "Dernier article"
+msgstr "Latest Articles"
+
+#: backend/blog/templates/blog/articles_par_categorie.html:70
+msgid "Par"
+msgstr ""
+
+#: backend/blog/templates/blog/articles_par_categorie.html:75
+#, fuzzy
+#| msgid "Voir l'article"
+msgid "Lire l'article"
+msgstr "View article"
+
+#: backend/blog/templates/blog/articles_par_categorie.html:87
+#, fuzzy
+#| msgid "commentaire"
+msgid "Ajouter du contenu"
+msgstr "comment"
+
+#: backend/blog/templates/blog/articles_par_categorie.html:90
+#, fuzzy
+#| msgid "Total articles"
+msgid "Nouvel article dans"
+msgstr "Total articles"
+
+#: backend/blog/templates/blog/articles_par_categorie.html:93
+#: backend/blog/templates/blog/articles_par_categorie.html:115
+#, fuzzy
+#| msgid "Sans catégorie"
+msgid "Retour aux catégories"
+msgstr "No category"
+
+#: backend/blog/templates/blog/articles_par_categorie.html:103
+#, fuzzy
+#| msgid "Aucun article disponible"
+msgid "Aucun article dans cette catégorie"
+msgstr "No articles available"
+
+#: backend/blog/templates/blog/articles_par_categorie.html:105
+#, python-format
+msgid ""
+"\n"
+"                La catégorie \"%(category_name)s\" ne contient pas encore d'articles. \n"
+"                Commencez par créer votre premier article !\n"
+"                "
+msgstr ""
+
+#: backend/blog/templates/blog/articles_par_categorie.html:112
+#, fuzzy
+#| msgid "Créer le premier article"
+msgid "Créer le premier article"
+msgstr "Create my first article"
+
+#: backend/blog/templates/blog/detail_article.html:6
+#: backend/blog/templates/blog/home.html:6
+#: backend/blog/templates/blog/home.html:18
+#: backend/blog/templates/blog/layout.html:13
+msgid "Mon Blog"
+msgstr "My Blog"
+
+#: backend/blog/templates/blog/detail_article.html:49
+msgid "Dernière modification"
+msgstr "Last modified"
+
+#: backend/blog/templates/blog/detail_article.html:71
+#, fuzzy
+#| msgid "commentaire"
+msgid "Ajouter un commentaire"
+msgstr "comment"
+
+#: backend/blog/templates/blog/detail_article.html:76
+msgid "Écrivez votre commentaire ici..."
+msgstr "Write your comment here..."
+
+#: backend/blog/templates/blog/detail_article.html:79
+msgid "Publier"
+msgstr "Publish"
+
+#: backend/blog/templates/blog/detail_article.html:88
+msgid "Connexion requise"
+msgstr "Login required"
+
+#: backend/blog/templates/blog/detail_article.html:89
+msgid "Connectez-vous"
+msgstr "Log in"
+
+#: backend/blog/templates/blog/detail_article.html:89
+msgid "ou"
+msgstr "or"
+
+#: backend/blog/templates/blog/detail_article.html:90
+msgid "inscrivez-vous"
+msgstr "sign up"
+
+#: backend/blog/templates/blog/detail_article.html:91
+#, fuzzy
+#| msgid "Supprimer cet article ?"
+msgid "pour pouvoir commenter cet article."
+msgstr "Delete this article?"
+
+#: backend/blog/templates/blog/detail_article.html:114
+msgid "Aucun commentaire pour le moment. Soyez le premier à commenter !"
+msgstr "No comments yet. Be the first to comment!"
+
+#: backend/blog/templates/blog/detail_article.html:128
+msgid "Date de création"
+msgstr "Creation date"
+
+#: backend/blog/templates/blog/detail_article.html:132
+#, fuzzy
+#| msgid "commentaire"
+msgid "Nombre de commentaires"
+msgstr "Number of comments"
+
+#: backend/blog/templates/blog/detail_article.html:161
+msgid "Confirmer la suppression"
+msgstr "Confirm deletion"
+
+#: backend/blog/templates/blog/detail_article.html:167
+msgid "Attention !"
+msgstr "Warning!"
+
+#: backend/blog/templates/blog/detail_article.html:167
+msgid "Cette action est irréversible."
+msgstr "This action is irreversible."
+
+#: backend/blog/templates/blog/detail_article.html:169
+msgid "Êtes-vous sûr de vouloir supprimer l'article"
+msgstr "Are you sure you want to delete the article"
+
+#: backend/blog/templates/blog/detail_article.html:176
+msgid "Supprimer définitivement"
+msgstr "Delete permanently"
+
+#: backend/blog/templates/blog/home.html:16
+#: backend/blog/templates/blog/home.html:18
+msgid "Bienvenue"
+msgstr "Welcome"
+
+#: backend/blog/templates/blog/home.html:23
+msgid "Découvrez les derniers articles ou partagez vos propres idées."
+msgstr "Discover the latest articles or share your own ideas."
+
+#: backend/blog/templates/blog/home.html:25
+msgid ""
+"Connectez-vous pour accéder à tous les articles et participer aux "
+"discussions."
+msgstr "Log in to access all articles and participate in discussions."
+
+#: backend/blog/templates/blog/home.html:29
+msgid "Créer un Article"
+msgstr "Create an Article"
+
+#: backend/blog/templates/blog/home.html:49
+msgid "Total des articles publiés"
+msgstr "Total published articles"
+
+#: backend/blog/templates/blog/home.html:57
+msgid "Communauté"
+msgstr "Community"
+
+#: backend/blog/templates/blog/home.html:58
+msgid "Rejoignez la discussion"
+msgstr "Join the discussion"
+
+#: backend/blog/templates/blog/home.html:67
+msgid "Partagez vos opinions"
+msgstr "Share your opinions"
+
+#: backend/blog/templates/blog/home.html:78
+msgid "Derniers Articles"
+msgstr "Latest Articles"
+
+#: backend/blog/templates/blog/home.html:80
+msgid "Aperçu des Articles"
+msgstr "Articles Preview"
+
+#: backend/blog/templates/blog/home.html:92
+#: backend/blog/templates/blog/home.html:97
+msgid "Toutes les langues"
+msgstr "All languages"
+
+#: backend/blog/templates/blog/home.html:129
+msgid "Accès limité"
+msgstr "Limited access"
+
+#: backend/blog/templates/blog/home.html:129
+msgid ""
+"Connectez-vous pour voir tous les articles et accéder aux fonctionnalités "
+"complètes."
+msgstr "Log in to see all articles and access all features."
+
+#: backend/blog/templates/blog/layout.html:81
+msgid "MonBlog"
+msgstr "MyBlog"
+
+#: backend/blog/templates/blog/layout.html:107
+msgid "Créer"
+msgstr "Create"
+
+#: backend/blog/templates/blog/layout.html:126
+msgid "Demandes auteur"
+msgstr "Author requests"
+
+#: backend/blog/templates/blog/liste_categories.html:4
+#: backend/blog/templates/blog/liste_categories.html:7
+#, fuzzy
+#| msgid "Voir tous les articles"
+msgid "Catégories d'articles"
+msgstr "View all articles"
+
+#: backend/blog/templates/blog/liste_categories.html:32
+#, fuzzy
+#| msgid "Voir tous les articles"
+msgid "Voir les articles"
+msgstr "View all articles"
+
+#: backend/blog/templates/blog/liste_categories.html:42
+msgid "Aucune catégorie enregistrée"
+msgstr ""
+
+#: backend/blog/templates/blog/liste_categories.html:43
+#, fuzzy
+#| msgid "Commentaires"
+msgid "Commencez par"
+msgstr "Comments"
+
+#: backend/blog/templates/blog/liste_categories.html:43
+#, fuzzy
+#| msgid "Créer le premier article"
+msgid "créer votre première catégorie"
+msgstr "Create my first article"
+
+#: backend/blog/templates/blog/modifier_article.html:4
+#: backend/blog/templates/blog/modifier_article.html:8
+#, fuzzy
+#| msgid "Voir l'article"
+msgid "Modifier l'article"
+msgstr "View article"
+
+#: backend/blog/templates/blog/modifier_article.html:65
+#, fuzzy
+#| msgid "Gestion des articles"
+msgid "Gestion de l'image"
+msgstr "Article Management"
+
+#: backend/blog/templates/blog/modifier_article.html:71
+#, fuzzy
+#| msgid "Image (optionnelle)"
+msgid "Image actuelle"
+msgstr "Image (optional)"
+
+#: backend/blog/templates/blog/modifier_article.html:88
+#, fuzzy
+#| msgid "Supprimer cet article ?"
+msgid "Supprimer l'image actuelle"
+msgstr "Delete this article?"
+
+#: backend/blog/templates/blog/modifier_article.html:94
+#, fuzzy
+#| msgid "Faire une nouvelle demande"
+msgid "Remplacer par une nouvelle image"
+msgstr "Make a new request"
+
+#: backend/blog/templates/blog/modifier_article.html:99
+msgid ""
+"Si vous sélectionnez une nouvelle image, elle remplacera automatiquement "
+"l'actuelle."
+msgstr ""
+
+#: backend/blog/templates/blog/modifier_article.html:107
+#, fuzzy
+#| msgid "Créer un Article"
+msgid "Ajouter une image"
+msgstr "Create an Article"
+
+#: templates/admin/articles.html:0
+msgid "@{{ article.auteur.username }}"
+msgstr ""
+
+#: templates/admin/demandes.html:0
+msgid "({{ demande.user.username }})"
+msgstr ""
+
+#: templates/admin/utilisateurs.html:0
+msgid "@{{ user.username }}"
+msgstr ""
+
+#: templates/auth/profile.html:0
+msgid "({{ mes_articles.count }})"
+msgstr ""
+
+#: templates/blog/articles_par_categorie.html:0
+msgid ": {{ articles.first.date_publication|date:\"d/m/Y\" }}"
+msgstr ""
+
+#: templates/blog/detail_article.html:0
+msgid ": {{ article.date_modification|date:\"d/m/Y à H:i\" }}"
+msgstr ""
+
+#: templates/blog/detail_article.html:0
+msgid "({{ commentaires.count }})"
+msgstr ""
+
+#: templates/blog/detail_article.html:0
+msgid "\"{{ article.titre }}\""
+msgstr ""
+
+#: templates/blog/home.html:0
+msgid "🇫🇷 Français"
+msgstr ""
+
+#: templates/blog/home.html:0
+msgid "🇬🇧 English"
+msgstr ""
+
+#: templates/blog/home.html:0
+msgid "🇪🇸 Español"
+msgstr ""
+
+#: important_translations.py:0
+msgid "Article"
+msgstr "Article"
+
+#: important_translations.py:0
+msgid "Formats acceptés"
+msgstr "Accepted formats"
+nd/blog/templates/blog/modifier_article.html:107
+#, fuzzy
+#| msgid "Créer un Article"
+msgid "Ajouter une image"
+msgstr "Create an Article"
+
+#: templates/admin/articles.html:0
+msgid "@{{ article.auteur.username }}"
+msgstr ""
+
+#: templates/admin/demandes.html:0
+msgid "({{ demande.user.username }})"
+msgstr ""
+
+#: templates/admin/utilisateurs.html:0
+msgid "@{{ user.username }}"
+msgstr ""
+
+#: templates/auth/profile.html:0
+msgid "({{ mes_articles.count }})"
+msgstr ""
+
+#: templates/blog/articles_par_categorie.html:0
+msgid ": {{ articles.first.date_publication|date:\"d/m/Y\" }}"
+msgstr ""
+
+#: templates/blog/detail_article.html:0
+msgid ": {{ article.date_modification|date:\"d/m/Y à H:i\" }}"
+msgstr ""
+
+#: templates/blog/detail_article.html:0
+msgid "({{ commentaires.count }})"
+msgstr ""
+
+#: templates/blog/detail_article.html:0
+msgid "\"{{ article.titre }}\""
+msgstr ""
+
+#: templates/blog/home.html:0
+msgid "🇫🇷 Français"
+msgstr ""
+
+#: templates/blog/home.html:0
+msgid "🇬🇧 English"
+msgstr ""
+
+#: templates/blog/home.html:0
+msgid "🇪🇸 Español"
+msgstr ""
+r votre première catégorie"
+msgstr "Create my first article"
+
+
+#: backend/blog/templates/blog/modifier_article.html:4
+#: backend/blog/templates/blog/modifier_article.html:8
+#, fuzzy
+#| msgid "Voir l'article"
+msgid "Modifier l'article"
+msgstr "View article"
+
+
+#: backend/blog/templates/blog/modifier_article.html:65
+#, fuzzy
+#| msgid "Gestion des articles"
+msgid "Gestion de l'image"
+msgstr "Article Management"
+
+
+#: backend/blog/templates/blog/modifier_article.html:71
+#, fuzzy
+#| msgid "Image (optionnelle)"
+msgid "Image actuelle"
+msgstr "Image (optional)"
+
+
+#: backend/blog/templates/blog/modifier_article.html:88
+#, fuzzy
+#| msgid "Supprimer cet article ?"
+msgid "Supprimer l'image actuelle"
+msgstr "Delete this article?"
+
+
+#: backend/blog/templates/blog/modifier_article.html:94
+#, fuzzy
+#| msgid "Faire une nouvelle demande"
+msgid "Remplacer par une nouvelle image"
+msgstr "Make a new request"
+
+
+#: backend/blog/templates/blog/modifier_article.html:99
+msgid "Si vous sélectionnez une nouvelle image, elle remplacera automatiquement l'actuelle."
+msgstr ""
+
+
+#: backend/blog/templates/blog/modifier_article.html:107
+#, fuzzy
+#| msgid "Créer un Article"
+msgid "Ajouter une image"
+msgstr "Create an Article"
+
+

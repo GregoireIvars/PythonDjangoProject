@@ -1,14 +1,15 @@
 {% extends 'blog/layout.html' %}
 {% load static %}
+{% load i18n %}
+{% load blog_tags %}
 
-{% block title %}{{ article.titre }} - Mon Blog{% endblock %}
+{% block title %}{{ article.titre }} - {% trans "Mon Blog" %}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb">
+    <!-- Breadcrumb -->    <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'blog:home' %}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'blog:home' %}">{% trans "Accueil" %}</a></li>
             <li class="breadcrumb-item active">{{ article.titre|truncatechars:30 }}</li>
         </ol>
     </nav>
@@ -24,14 +25,17 @@
                 
                 <div class="card-body">
                     <h1 class="card-title">{{ article.titre }}</h1>
-                    
-                    <div class="article-meta mb-3">
+                      <div class="article-meta mb-3">
                         <small class="text-muted">
-                            <i class="fas fa-user"></i> Par {{ article.auteur.username }}
+                            <i class="fas fa-user"></i> {% trans "Par" %} {{ article.auteur.username }}
                             <i class="fas fa-calendar ms-2"></i> {{ article.date_publication|date:"d/m/Y à H:i" }}
                             {% if article.categorie %}
                             <i class="fas fa-tag ms-2"></i> {{ article.categorie.nom }}
                             {% endif %}
+                            <!-- Language badge -->
+                            <span class="badge bg-info ms-2">
+                                {{ article.langue|get_language_flag }} {{ article.langue|get_language_name }}
+                            </span>
                         </small>
                     </div>
                     
@@ -39,42 +43,39 @@
                         {{ article.contenu|linebreaks }}
                     </div>
                 </div>
-                
-                <div class="card-footer d-flex justify-content-between align-items-center">
+                  <div class="card-footer d-flex justify-content-between align-items-center">
                     <small class="text-muted">
-                        Dernière modification : {{ article.date_modification|date:"d/m/Y à H:i" }}
+                        {% trans "Dernière modification" %} : {{ article.date_modification|date:"d/m/Y à H:i" }}
                     </small>
                     
                     {% if peut_modifier %}
                     <div class="btn-group" role="group">
                         <a href="{% url 'blog:modifier_article' article.id %}" class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-edit"></i> Modifier
+                            <i class="fas fa-edit"></i> {% trans "Modifier" %}
                         </a>
                         <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-                            <i class="fas fa-trash"></i> Supprimer
+                            <i class="fas fa-trash"></i> {% trans "Supprimer" %}
                         </button>
                     </div>
                     {% endif %}
                 </div>
-            </article>
-
-            <!-- Section commentaires -->
+            </article>            <!-- Section commentaires -->
             <div class="mt-4">
-                <h3><i class="fas fa-comments"></i> Commentaires ({{ commentaires.count }})</h3>
+                <h3><i class="fas fa-comments"></i> {% trans "Commentaires" %} ({{ commentaires.count }})</h3>
                 
                 {% if user.is_authenticated %}
                 <!-- Formulaire d'ajout de commentaire -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h5 class="card-title">Ajouter un commentaire</h5>
+                        <h5 class="card-title">{% trans "Ajouter un commentaire" %}</h5>
                         <form method="post">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <textarea name="contenu" class="form-control" rows="3" 
-                                         placeholder="Écrivez votre commentaire ici..." required></textarea>
+                                         placeholder="{% trans 'Écrivez votre commentaire ici...' %}" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i> Publier
+                                <i class="fas fa-paper-plane"></i> {% trans "Publier" %}
                             </button>
                         </form>
                     </div>
@@ -83,10 +84,10 @@
                 <!-- Message pour utilisateurs non connectés -->
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle"></i>
-                    <strong>Connexion requise :</strong>
-                    <a href="{% url 'blog:login' %}" class="alert-link">Connectez-vous</a> ou 
-                    <a href="{% url 'blog:signup' %}" class="alert-link">inscrivez-vous</a> 
-                    pour pouvoir commenter cet article.
+                    <strong>{% trans "Connexion requise" %} :</strong>
+                    <a href="{% url 'blog:login' %}" class="alert-link">{% trans "Connectez-vous" %}</a> {% trans "ou" %} 
+                    <a href="{% url 'blog:signup' %}" class="alert-link">{% trans "inscrivez-vous" %}</a> 
+                    {% trans "pour pouvoir commenter cet article." %}
                 </div>
                 {% endif %}
 
@@ -106,11 +107,10 @@
                             <i class="fas fa-clock"></i> {{ commentaire.date_publication|date:"d/m/Y à H:i" }}
                         </small>
                     </div>
-                </div>
-                {% empty %}
+                </div>                {% empty %}
                 <div class="text-center text-muted py-4">
                     <i class="fas fa-comment-slash fa-2x mb-2"></i>
-                    <p>Aucun commentaire pour le moment. Soyez le premier à commenter !</p>
+                    <p>{% trans "Aucun commentaire pour le moment. Soyez le premier à commenter !" %}</p>
                 </div>
                 {% endfor %}
             </div>
@@ -120,15 +120,15 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
-                    <h5><i class="fas fa-info-circle"></i> Informations</h5>
+                    <h5><i class="fas fa-info-circle"></i> {% trans "Informations" %}</h5>
                 </div>
                 <div class="card-body">
-                    <p><strong>Auteur :</strong> {{ article.auteur.username }}</p>
-                    <p><strong>Date de création :</strong> {{ article.date_publication|date:"d F Y" }}</p>
+                    <p><strong>{% trans "Auteur" %} :</strong> {{ article.auteur.username }}</p>
+                    <p><strong>{% trans "Date de création" %} :</strong> {{ article.date_publication|date:"d F Y" }}</p>
                     {% if article.categorie %}
-                    <p><strong>Catégorie :</strong> {{ article.categorie.nom }}</p>
+                    <p><strong>{% trans "Catégorie" %} :</strong> {{ article.categorie.nom }}</p>
                     {% endif %}
-                    <p><strong>Nombre de commentaires :</strong> {{ commentaires.count }}</p>
+                    <p><strong>{% trans "Nombre de commentaires" %} :</strong> {{ commentaires.count }}</p>
                 </div>
             </div>
         </div>
@@ -155,25 +155,24 @@
 <!-- Modal de confirmation de suppression -->
 {% if peut_modifier %}
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog">        <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirmer la suppression</h5>
+                <h5 class="modal-title">{% trans "Confirmer la suppression" %}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-warning">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <strong>Attention !</strong> Cette action est irréversible.
+                    <strong>{% trans "Attention !" %}</strong> {% trans "Cette action est irréversible." %}
                 </div>
-                <p>Êtes-vous sûr de vouloir supprimer l'article <strong>"{{ article.titre }}"</strong> ?</p>
+                <p>{% trans "Êtes-vous sûr de vouloir supprimer l'article" %} <strong>"{{ article.titre }}"</strong> ?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Annuler" %}</button>
                 <form method="post" action="{% url 'blog:supprimer_article' article.id %}" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-trash"></i> Supprimer définitivement
+                        <i class="fas fa-trash"></i> {% trans "Supprimer définitivement" %}
                     </button>
                 </form>
             </div>

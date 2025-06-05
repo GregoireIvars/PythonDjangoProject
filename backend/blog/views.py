@@ -8,15 +8,26 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import models
+from django.utils.translation import get_language
+from django.core.files import File
+import os
 from .models import Article, Commentaire, Categorie, UserProfile
 from .forms import ArticleForm, UserRegistrationForm, UserProfileForm, DemandeAuteurForm, CategorieForm, SimpleCommentForm
+from .forms_ai import AIArticleGenerationForm
 from .decorators import require_author, require_admin, require_article_owner_or_admin
+from .openai_utils import generate_article_content, generate_title, generate_image
 from django.views.decorators.csrf import csrf_protect
 
-# ✅ HOME - Accessible à tous
+# ✅ HOME - Accessible à tous avec filtrage par langue
 @never_cache
 def home(request):
     articles = Article.objects.all().order_by('-date_publication')
+    
+    # Filtrage par langue si spécifié
+    language_filter = request.GET.get('lang')
+    if language_filter:
+        articles = articles.filter(langue=language_filter)
+    
     total_articles = articles.count()
     total_users = User.objects.count()
     
@@ -25,6 +36,8 @@ def home(request):
         'total_articles': total_articles,
         'total_users': total_users,
         'is_public_view': not request.user.is_authenticated,
+        'current_language_filter': language_filter,
+        'available_languages': Article.LANGUE_CHOICES,
     }
     return render(request, 'blog/home.html', context)
 
@@ -267,6 +280,26 @@ def articles_par_categorie(request, categorie_id):
         'articles': articles
     })
 
+@never_cache
+def articles_par_langue(request, langue_code):
+    """Vue pour afficher les articles filtrés par langue"""
+    # Vérifier que le code de langue est valide
+    langues_valides = dict(Article.LANGUE_CHOICES)
+    if langue_code not in langues_valides:
+        messages.error(request, f'Code de langue invalide: {langue_code}')
+        return redirect('blog:home')
+    
+    articles = Article.objects.filter(langue=langue_code).order_by('-date_publication')
+    langue_nom = langues_valides[langue_code]
+    
+    context = {
+        'articles': articles,
+        'langue_code': langue_code,
+        'langue_nom': langue_nom,
+        'available_languages': Article.LANGUE_CHOICES,
+    }
+    return render(request, 'blog/articles_par_langue.html', context)
+
 # ✅ CREATION CATEGORIE - Admin uniquement
 @require_admin
 @never_cache
@@ -443,3 +476,114 @@ def supprimer_categorie(request, categorie_id):
         messages.success(request, f'Catégorie "{nom}" supprimée avec succès.')
     
     return redirect('blog:admin_categories')
+
+# ✅ GÉNÉRATION D'ARTICLE PAR IA - Auteurs et admins uniquement
+@require_author
+@never_cache
+def generer_article_ai(request):
+    if request.method == 'POST':
+        form = AIArticleGenerationForm(request.POST)
+        if form.is_valid():
+            # Récupération des données du formulaire
+            prompt = form.cleaned_data['prompt']
+            langue = form.cleaned_data['langue']
+            categorie = form.cleaned_data['categorie']
+            titre_suggere = form.cleaned_data['titre']
+            generer_image = form.cleaned_data['generer_image']
+            
+            try:
+                # Initialiser la session avec les étapes de progression
+                request.session['ai_generation'] = {
+                    'total_steps': 3 + (1 if generer_image else 0),
+                    'current_step': 1,
+                    'step_name': 'contenu'
+                }
+                
+                # 1. Génération du contenu de l'article
+                messages.info(request, 'Génération du contenu de l\'article en cours...')
+                contenu = generate_article_content(prompt, language=langue)
+                
+                if not contenu or "Erreur" in contenu:
+                    messages.error(request, f'Échec de la génération du contenu: {contenu}')
+                    # Ajouter contexte d'erreur pour le JS
+                    return render(request, 'blog/generer_article_ai.html', {
+                        'form': form,
+                        'error_occurred': True
+                    })
+                
+                # Mise à jour de la progression
+                request.session['ai_generation']['current_step'] = 2
+                request.session['ai_generation']['step_name'] = 'titre'
+                request.session.modified = True
+                
+                # 2. Génération ou utilisation du titre fourni
+                if not titre_suggere:
+                    messages.info(request, 'Génération du titre en cours...')
+                    titre = generate_title(contenu, language=langue)
+                else:
+                    titre = titre_suggere
+                
+                # Mise à jour de la progression
+                request.session['ai_generation']['current_step'] = 3
+                request.session['ai_generation']['step_name'] = 'article'
+                request.session.modified = True
+                
+                # 3. Création de l'article
+                article = Article(
+                    titre=titre,
+                    contenu=contenu,
+                    auteur=request.user,
+                    categorie=categorie,
+                    langue=langue
+                )
+                
+                # 4. Génération d'image si demandé
+                if generer_image:
+                    # Mise à jour de la progression
+                    request.session['ai_generation']['current_step'] = 4
+                    request.session['ai_generation']['step_name'] = 'image'
+                    request.session.modified = True
+                    
+                    messages.info(request, 'Génération de l\'image en cours...')
+                    image_path = generate_image(prompt, language=langue)
+                    
+                    if image_path:
+                        # Ouverture et sauvegarde de l'image
+                        with open(image_path, 'rb') as img_file:
+                            article.images.save(
+                                f"{titre[:30].replace(' ', '_')}.png", 
+                                File(img_file), 
+                                save=False
+                            )
+                        # Supprimer le fichier temporaire
+                        os.remove(image_path)
+                
+                # 5. Sauvegarde de l'article
+                article.save()
+                
+                # Nettoyage de la session
+                if 'ai_generation' in request.session:
+                    del request.session['ai_generation']
+                
+                messages.success(request, 'Article généré et publié avec succès !')
+                return redirect('blog:detail_article', article_id=article.id)
+                
+            except Exception as e:
+                # Nettoyage de la session en cas d'erreur
+                if 'ai_generation' in request.session:
+                    del request.session['ai_generation']
+                
+                messages.error(request, f'Une erreur est survenue: {str(e)}')
+                # Ajouter contexte d'erreur pour le JS
+                return render(request, 'blog/generer_article_ai.html', {
+                    'form': form,
+                    'error_occurred': True
+                })
+    else:
+        # Nettoyage de la session si on accède au formulaire
+        if 'ai_generation' in request.session:
+            del request.session['ai_generation']
+            
+        form = AIArticleGenerationForm()
+    
+    return render(request, 'blog/generer_article_ai.html', {'form': form})

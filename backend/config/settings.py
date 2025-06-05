@@ -5,6 +5,10 @@ Django settings for config project.
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Charger les variables d'environnement depuis le fichier .env
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -15,9 +19,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 if not os.path.exists(MEDIA_ROOT):
     os.makedirs(MEDIA_ROOT)
 
-SECRET_KEY = 'django-insecure-hz$7*^q3)s7uxyes8dnlcc3_3l4+#_+6-glgy@k$6j2u%&%rws'
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key-change-me')
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -31,7 +35,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware', 
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # ✅ Middleware pour la langue
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',  # ✅ Doit être présent
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -76,11 +81,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgresSQL_db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
+        'NAME': os.getenv('DB_NAME', 'postgresSQL_db'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -99,10 +104,35 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'fr-fr'
+# ===================================
+# INTERNATIONALISATION ET TRADUCTION
+# ===================================
+
+LANGUAGE_CODE = 'fr'  # Langue par défaut
 TIME_ZONE = 'Europe/Paris'
-USE_I18N = True
+
+# ===================================
+# CONFIGURATION DE L'API OpenAI
+# ===================================
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+if not OPENAI_API_KEY:
+    raise ValueError("La clé API OpenAI est requise. Veuillez la définir dans le fichier .env ou comme variable d'environnement.")
+
+USE_I18N = True  # Active l'internationalisation
+USE_L10N = True  # Active la localisation
 USE_TZ = True
+
+# Langues supportées
+LANGUAGES = [
+    ('fr', 'Français'),
+    ('en', 'English'),
+    ('es', 'Español'),
+]
+
+# Chemins vers les fichiers de traduction
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -138,3 +168,6 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'danger',
 }
+
+# Configuration pour l'environnement de production
+# En production, ces variables doivent être définies sur le serveur
