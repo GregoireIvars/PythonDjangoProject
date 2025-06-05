@@ -151,32 +151,66 @@ docker-compose exec web python backend/manage.py compilemessages
 
 ## 👤 Création du Compte Administrateur
 
-### Méthode 1 : Via Django Admin
-```bash
-# Créer un superutilisateur Django
-docker-compose exec web python backend/manage.py createsuperuser
+### ⚡ Méthode Recommandée : Commande personnalisée
+Le projet inclut une commande personnalisée qui crée automatiquement un administrateur avec tous les bons rôles et permissions.
 
-# Suivre les instructions pour créer le compte
+#### Mode interactif (recommandé)
+```cmd
+docker-compose exec web python backend/manage.py create_admin --interactive
+```
+Cette commande vous demandera interactivement :
+- Nom d'utilisateur
+- Email  
+- Mot de passe
+- Prénom (optionnel)
+- Nom (optionnel)
+
+#### Mode direct avec paramètres
+```cmd
+docker-compose exec web python backend/manage.py create_admin --username admin --email admin@exemple.com --password motdepasse123
 ```
 
-### Méthode 2 : Via l'interface web
-1. Inscrivez-vous normalement sur http://localhost:8000/signup/
-2. Connectez-vous au conteneur web : `docker-compose exec web bash`
-3. Ouvrez le shell Django : `python backend/manage.py shell`
-4. Exécutez :
+### 🔧 Méthode Alternative : Via le shell Django
+Si vous préférez créer manuellement :
+1. Connectez-vous au conteneur : `docker-compose exec web bash`
+2. Ouvrez le shell Django : `python backend/manage.py shell`
+3. Exécutez :
 ```python
 from django.contrib.auth.models import User
 from blog.models import UserProfile
+from django.db import transaction
 
-# Récupérer votre utilisateur
-user = User.objects.get(username='votre_nom_utilisateur')
+# Créer l'utilisateur avec tous les privilèges
+with transaction.atomic():
+    user = User.objects.create_user(
+        username='admin',
+        email='admin@exemple.com', 
+        password='motdepasse123',
+        first_name='Admin',
+        last_name='Système',
+        is_staff=True,
+        is_superuser=True
+    )
+    
+    # Créer le profil avec le rôle admin
+    profile, created = UserProfile.objects.get_or_create(user=user)
+    profile.role = 'admin'
+    profile.bio = 'Administrateur principal du blog'
+    profile.save()
+    
+    print(f"✅ Administrateur '{user.username}' créé avec le rôle: {profile.get_role_display()}")
 
-# Modifier le rôle vers admin
-profile = user.profile
-profile.role = 'admin'
-profile.save()
+exit()
+```
 
-print(f"Utilisateur {user.username} est maintenant administrateur")
+### ✅ Vérification du compte créé
+```cmd
+# Vérifier que l'admin a été créé correctement
+docker-compose exec web python backend/manage.py shell -c "
+from django.contrib.auth.models import User
+user = User.objects.get(username='admin')
+print(f'User: {user.username} | Superuser: {user.is_superuser} | Role: {user.profile.role}')
+"
 ```
 
 ### Accès au panel d'administration
@@ -327,6 +361,41 @@ docker-compose exec web python backend/manage.py collectstatic
 docker-compose exec web python backend/manage.py compilemessages
 ```
 
+### 🎯 Commandes de Gestion Personnalisées
+
+#### Création d'administrateur
+```cmd
+# Mode interactif (recommandé)
+docker-compose exec web python backend/manage.py create_admin --interactive
+
+# Mode direct
+docker-compose exec web python backend/manage.py create_admin --username admin --email admin@exemple.com --password motdepasse123
+```
+
+#### Gestion des utilisateurs
+```cmd
+# Lister tous les utilisateurs avec leurs rôles
+docker-compose exec web python backend/manage.py shell -c "
+from django.contrib.auth.models import User
+from blog.models import UserProfile
+for user in User.objects.all():
+    try:
+        role = user.profile.get_role_display()
+    except:
+        role = 'Aucun profil'
+    print(f'{user.username} - {user.email} - {role}')
+"
+
+# Changer le rôle d'un utilisateur
+docker-compose exec web python backend/manage.py shell -c "
+from django.contrib.auth.models import User
+user = User.objects.get(username='nom_utilisateur')
+user.profile.role = 'auteur'  # ou 'admin' ou 'lecteur'
+user.profile.save()
+print(f'Rôle de {user.username} changé vers {user.profile.get_role_display()}')
+"
+```
+
 ### 🐛 Dépannage
 
 #### Problèmes Courants et Solutions
@@ -458,6 +527,12 @@ docker-compose restart web
 - @require_author : Accès auteurs/admins
 - @require_admin : Accès admins uniquement
 - @require_article_owner_or_admin : Propriétaire ou admin
+```
+
+#### Commandes de Gestion Django
+```python
+# Commandes personnalisées dans management/commands/
+- create_admin.py : Création d'administrateurs avec rôles corrects
 ```
 
 ### 🌐 URLs et Endpoints
