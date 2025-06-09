@@ -1,0 +1,274 @@
+{% extends 'blog/layout.html' %}
+{% load static %}
+{% load blog_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Mon Profil" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+.profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    color: white;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border: 4px solid white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.role-badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+}
+
+.status-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+    border-left: 4px solid;
+}
+
+.status-card.pending {
+    border-left-color: #ffc107;
+}
+
+.status-card.approved {
+    border-left-color: #28a745;
+}
+
+.status-card.rejected {
+    border-left-color: #dc3545;
+}
+
+.article-card {
+    transition: transform 0.3s ease;
+}
+
+.article-card:hover {
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- En-tête du profil -->
+    <div class="profile-header">
+        <div class="row align-items-center">
+            <div class="col-md-2 text-center">
+                {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}" alt="Avatar" class="rounded-circle profile-avatar">
+                {% else %}
+                <div class="bg-light rounded-circle profile-avatar d-flex align-items-center justify-content-center mx-auto">
+                    <i class="fas fa-user fa-3x text-primary"></i>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <h2 class="mb-1">{{ user.first_name|default:user.username }}</h2>
+                <p class="mb-2 opacity-75">@{{ user.username }}</p>
+                <span class="role-badge bg-{% if user|has_role:'admin' %}danger{% elif user|has_role:'auteur' %}success{% else %}secondary{% endif %}">
+                    <i class="fas fa-{% if user|has_role:'admin' %}crown{% elif user|has_role:'auteur' %}pen{% else %}user{% endif %} me-2"></i>
+                    {{ user|user_role|title }}
+                </span>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'blog:edit_profile' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-edit me-2"></i>{% trans "Modifier profil" %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <!-- Informations du profil -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>{% trans "Informations" %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">{% trans "Email" %}</label>
+                        <p class="mb-0">{{ user.email|default:"Non renseigné" }}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-muted">{% trans "Membre depuis" %}</label>
+                        <p class="mb-0">{{ user.date_joined|date:"d F Y" }}</p>
+                    </div>
+                    
+                    {% if profile.bio %}
+                    <div class="mb-3">
+                        <label class="form-label text-muted">{% trans "Biographie" %}</label>
+                        <p class="mb-0">{{ profile.bio|linebreaksbr }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if profile.ville %}
+                    <div class="mb-3">
+                        <label class="form-label text-muted">{% trans "Ville" %}</label>
+                        <p class="mb-0">
+                            <i class="fas fa-map-marker-alt me-1"></i>{{ profile.ville }}
+                        </p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if profile.site_web %}
+                    <div class="mb-3">
+                        <label class="form-label text-muted">{% trans "Site web" %}</label>
+                        <p class="mb-0">
+                            <a href="{{ profile.site_web }}" target="_blank" class="text-primary">
+                                <i class="fas fa-external-link-alt me-1"></i>{% trans "Visiter" %}
+                            </a>
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Statut demande d'auteur -->
+            {% if user|user_role == 'lecteur' %}
+            <div class="status-card {% if profile.demande_auteur_statut == 'en_attente' %}pending{% elif profile.demande_auteur_statut == 'acceptee' %}approved{% elif profile.demande_auteur_statut == 'refusee' %}rejected{% endif %}">
+                <h6>
+                    <i class="fas fa-star me-2"></i>{% trans "Statut Auteur" %}
+                </h6>
+                
+                {% if profile.demande_auteur_statut == 'aucune' %}
+                <p class="text-muted mb-3">{% trans "Vous êtes actuellement lecteur. Souhaitez-vous devenir auteur pour publier des articles ?" %}</p>
+                <a href="{% url 'blog:demander_auteur' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>{% trans "Demander à être auteur" %}
+                </a>
+                
+                {% elif profile.demande_auteur_statut == 'en_attente' %}
+                <div class="alert alert-warning mb-0">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-clock fa-2x me-3"></i>
+                        <div>
+                            <strong>{% trans "Demande en cours" %}</strong><br>
+                            <small>{% trans "Envoyée le" %} {{ profile.demande_auteur_date|date:"d/m/Y à H:i" }}</small><br>
+                            <small class="text-muted">{% trans "Un administrateur examinera votre demande sous peu." %}</small>
+                        </div>
+                    </div>
+                </div>
+                
+                {% elif profile.demande_auteur_statut == 'acceptee' %}
+                <div class="alert alert-success mb-0">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-check-circle fa-2x me-3"></i>
+                        <div>
+                            <strong>{% trans "Demande acceptée !" %}</strong><br>
+                            <small>{% trans "Le" %} {{ profile.admin_reponse_date|date:"d/m/Y à H:i" }}</small><br>
+                            {% if profile.admin_reponse %}
+                            <small class="text-muted">{{ profile.admin_reponse }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                {% elif profile.demande_auteur_statut == 'refusee' %}
+                <div class="alert alert-danger mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-times-circle fa-2x me-3"></i>
+                        <div>
+                            <strong>{% trans "Demande refusée" %}</strong><br>
+                            <small>{% trans "Le" %} {{ profile.admin_reponse_date|date:"d/m/Y à H:i" }}</small><br>
+                            {% if profile.admin_reponse %}
+                            <small class="text-muted">{{ profile.admin_reponse }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'blog:demander_auteur' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-redo me-2"></i>{% trans "Faire une nouvelle demande" %}
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-8">
+            <!-- Mes articles (si auteur/admin) -->
+            {% if user|can_create_articles %}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5>
+                    <i class="fas fa-newspaper me-2"></i>
+                    {% trans "Mes articles" %} ({{ mes_articles.count }})
+                </h5>
+                <a href="{% url 'blog:ajouter_article' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>{% trans "Nouvel article" %}
+                </a>
+            </div>
+
+            {% if mes_articles %}
+            <div class="row">
+                {% for article in mes_articles %}
+                <div class="col-md-6 mb-4">
+                    <div class="card article-card h-100">
+                        {% if article.images %}
+                        <img src="{{ article.images.url }}" class="card-img-top" alt="{{ article.titre }}" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title">{{ article.titre }}</h6>
+                            <p class="card-text flex-grow-1">{{ article.contenu|truncatewords:15 }}</p>
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        {{ article.date_publication|date:"d/m/Y" }}
+                                    </small>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'blog:detail_article' article.id %}" class="btn btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'blog:modifier_article' article.id %}" class="btn btn-outline-secondary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'blog:supprimer_article' article.id %}" class="btn btn-outline-danger" onclick="return confirm('{% trans "Supprimer cet article ?" %}')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-newspaper fa-3x mb-3"></i>
+                <h5>{% trans "Aucun article publié" %}</h5>
+                <p>{% trans "Commencez à partager vos idées avec le monde !" %}</p>
+                <a href="{% url 'blog:ajouter_article' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>{% trans "Créer mon premier article" %}
+                </a>
+            </div>
+            {% endif %}
+            
+            {% else %}
+            <!-- Message pour les lecteurs -->
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-book-reader fa-3x mb-3"></i>
+                <h5>{% trans "Espace de lecture" %}</h5>
+                <p>{% trans "Découvrez et commentez les articles de notre communauté !" %}</p>
+                <a href="{% url 'blog:home' %}" class="btn btn-primary">
+                    <i class="fas fa-home me-2"></i>{% trans "Parcourir les articles" %}
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

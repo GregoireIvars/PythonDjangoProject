@@ -1,0 +1,154 @@
+/* Styles pour la génération d'articles par IA */
+
+/* Styles des étapes de progression */
+.generation-progress {
+    margin: 30px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid #0d6efd;
+}
+
+/* Style des étapes individuelles */
+.progress-step {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 0;
+    margin-bottom: 10px;
+    border-left: 2px solid transparent;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.progress-step:last-child {
+    margin-bottom: 0;
+}
+
+/* Icône d'étape */
+.step-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+/* Contenu de l'étape */
+.step-content {
+    flex-grow: 1;
+}
+
+.step-title {
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: #495057;
+}
+
+.step-description {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+/* Étape active */
+.progress-step.active {
+    opacity: 1;
+    border-left: 2px solid #0d6efd;
+    padding-left: 10px;
+}
+
+.progress-step.active .step-icon {
+    background-color: #0d6efd;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(13, 110, 253, 0.4);
+}
+
+.progress-step.active .step-title {
+    color: #0d6efd;
+}
+
+/* Étape complétée */
+.progress-step.completed {
+    opacity: 1;
+    border-left: 2px solid #198754;
+}
+
+.progress-step.completed .step-icon {
+    background-color: #198754;
+    color: white;
+}
+
+.progress-step.completed .step-icon:after {
+    content: '✓';
+}
+
+/* Style de l'accordéon des options */
+.accordion-button:not(.collapsed) {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(13, 110, 253, 0.25);
+}
+
+/* Style de l'interface principale */
+.ai-card {
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05) !important;
+    border: none !important;
+}
+
+.ai-header {
+    background: linear-gradient(135deg, #f5f7fa, #e4e7ea);
+    border-bottom: none;
+}
+
+.card-body {
+    border-radius: 8px;
+}
+
+/* Bouton de génération */
+.submit-btn-ai {
+    background: linear-gradient(135deg, #0d6efd, #0099ff);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 25px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.submit-btn-ai:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+    color: white;
+}
+
+/* Animation en cas d'erreur */
+.alert-danger {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}

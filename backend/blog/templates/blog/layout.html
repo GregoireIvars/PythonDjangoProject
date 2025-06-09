@@ -1,0 +1,308 @@
+<!-- filepath: c:\Users\frus84312\AppPython\backend\blog\templates\blog\layout.html -->
+<!DOCTYPE html>
+{% load i18n %}
+{% load blog_tags %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <title>{% block title %}{% trans "Mon Blog" %}{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS personnalisés avec versioning pour éviter le cache -->
+    {% load static %}
+    <link href="{% static 'blog/css/base.css' %}?v={{ timestamp }}" rel="stylesheet">
+    <link href="{% static 'blog/css/components.css' %}?v={{ timestamp }}" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <style>
+    /* Styles pour le système de rôles */
+    .navbar-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .navbar-custom .navbar-brand {
+        color: white !important;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+    
+    .navbar-custom .nav-link {
+        color: rgba(255,255,255,0.9) !important;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-custom .nav-link:hover {
+        color: white !important;
+        transform: translateY(-1px);
+    }
+    
+    .navbar-custom .dropdown-menu {
+        border: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        border-radius: 10px;
+    }
+    
+    .role-badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 15px;
+    }
+    
+    .main-content {
+        min-height: calc(100vh - 200px);
+    }
+    
+    .main-footer {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 3rem 0 1rem;
+        margin-top: 3rem;
+    }    </style>
+</head>
+<body>
+    <!-- Navigation moderne avec système de rôles -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'blog:home' %}">
+                <i class=""></i>{% trans "MonBlog" %}
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog:home' %}">
+                            <i class="fas fa-home me-1"></i>{% trans "Accueil" %}
+                        </a>
+                    </li>
+                      <!-- ✅ Menu Catégories - Admin uniquement -->
+                    {% if user|can_manage_categories %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog:liste_categories' %}">
+                            <i class="fas fa-tags me-1"></i>{% trans "Catégories" %}
+                        </a>
+                    </li>
+                    {% endif %}
+                      <!-- ✅ Menu Auteur -->
+                    {% if user|can_create_articles %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="createDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-plus me-1"></i>{% trans "Créer" %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:ajouter_article' %}">
+                                    <i class="fas fa-pen-fancy me-2"></i>{% trans "Rédiger un article" %}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:generer_article_ai' %}">
+                                    <i class="fas fa-robot me-2"></i>{% trans "Générer avec IA" %}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    
+                    <!-- ✅ Menu Admin -->
+                    {% if user|has_role:'admin' %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-cogs me-1"></i>{% trans "Administration" %}
+                        </a>
+                        <ul class="dropdown-menu">                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:admin_panel' %}">
+                                    <i class="fas fa-tachometer-alt me-2"></i>{% trans "Dashboard" %}
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:admin_demandes' %}">
+                                    <i class="fas fa-user-check me-2"></i>{% trans "Demandes auteur" %}
+                                </a>
+                            </li>                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:admin_utilisateurs' %}">
+                                    <i class="fas fa-users me-2"></i>{% trans "Utilisateurs" %}
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:admin_articles' %}">
+                                    <i class="fas fa-newspaper me-2"></i>{% trans "Articles" %}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:admin_categories' %}">
+                                    <i class="fas fa-tags me-2"></i>{% trans "Catégories" %}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>
+                            {{ user.first_name|default:user.username }}
+                            <!-- ✅ Badge de rôle -->
+                            <span class="role-badge bg-{% if user|has_role:'admin' %}danger{% elif user|has_role:'auteur' %}success{% else %}secondary{% endif %} ms-1">
+                                {{ user|user_role|title }}
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu">                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:profile' %}">
+                                    <i class="fas fa-user me-2"></i>{% trans "Mon Profil" %}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:edit_profile' %}">
+                                    <i class="fas fa-edit me-2"></i>{% trans "Modifier profil" %}
+                                </a>
+                            </li>
+                            <!-- ✅ Demande auteur si lecteur -->
+                            {% if user|can_request_author %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-warning" href="{% url 'blog:demander_auteur' %}">
+                                    <i class="fas fa-star me-2"></i>{% trans "Devenir Auteur" %}
+                                </a>
+                            </li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>{% trans "Déconnexion" %}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog:login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i>{% trans "Connexion" %}
+                        </a>
+                    </li><li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog:signup' %}">
+                            <i class="fas fa-user-plus me-1"></i>{% trans "Inscription" %}
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    <!-- Sélecteur de langue -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-globe me-1"></i>
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% if LANGUAGE_CODE == 'fr' %}🇫🇷 FR
+                            {% elif LANGUAGE_CODE == 'en' %}🇬🇧 EN
+                            {% elif LANGUAGE_CODE == 'es' %}🇪🇸 ES
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% for lang_code, lang_name in LANGUAGES %}
+                                <li>
+                                    <form action="{% url 'set_language' %}" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input name="next" type="hidden" value="{{ request.get_full_path }}" />
+                                        <input name="language" type="hidden" value="{{ lang_code }}" />
+                                        <button type="submit" class="dropdown-item {% if lang_code == LANGUAGE_CODE %}active{% endif %}">
+                                            {% if lang_code == 'fr' %}🇫🇷 Français
+                                            {% elif lang_code == 'en' %}🇬🇧 English  
+                                            {% elif lang_code == 'es' %}🇪🇸 Español
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Formulaire d'exemple -->
+    <div class="container mt-4">
+        <form method="post">
+            {% csrf_token %}
+            <!-- Contenu du formulaire -->
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>    <script>
+    // Script pour gestion des notifications temps réel (optionnel)
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-hide alerts après 5 secondes
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 150);
+            }, 5000);
+        });
+
+        // Gestion du changement de langue avec rechargement des caches
+        const languageForms = document.querySelectorAll('form[action*="set_language"]');
+        languageForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                // Marquer que nous changeons de langue
+                sessionStorage.setItem('languageChange', 'true');
+                
+                // Soumettre le formulaire normalement
+                // Le rechargement sera géré après la redirection
+            });
+        });
+
+        // Vérifier si nous venons de changer de langue
+        if (sessionStorage.getItem('languageChange') === 'true') {
+            // Supprimer le marqueur
+            sessionStorage.removeItem('languageChange');
+            
+            // Forcer le rechargement avec vidage du cache (équivalent Ctrl+F5)
+            if (typeof location !== 'undefined') {
+                location.reload(true);
+            }
+        }
+    });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

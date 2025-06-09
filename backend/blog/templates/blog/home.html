@@ -1,0 +1,214 @@
+{% extends 'blog/layout.html' %}
+{% load static %}
+{% load i18n %}
+{% load blog_tags %}
+
+{% block title %}{% trans "Accueil" %} - {% trans "Mon Blog" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Header avec bienvenue -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="jumbotron bg-primary text-white p-4 rounded">                <h1 class="display-4">
+                    <i class="fas fa-home"></i> 
+                    {% if user.is_authenticated %}
+                        {% trans "Bienvenue" %} {{ user.username }} !
+                    {% else %}
+                        {% trans "Bienvenue" %} sur {% trans "Mon Blog" %}
+                    {% endif %}
+                </h1>
+                <p class="lead">
+                    {% if user.is_authenticated %}
+                        {% trans "Découvrez les derniers articles ou partagez vos propres idées." %}
+                    {% else %}
+                        {% trans "Connectez-vous pour accéder à tous les articles et participer aux discussions." %}
+                    {% endif %}
+                </p>                {% if user.is_authenticated %}
+                <a class="btn btn-light btn-lg" href="{% url 'blog:ajouter_article' %}" role="button">
+                    <i class="fas fa-plus"></i> {% trans "Créer un Article" %}
+                </a>
+                {% else %}
+                <a class="btn btn-light btn-lg me-2" href="{% url 'blog:login' %}" role="button">
+                    <i class="fas fa-sign-in-alt"></i> {% trans "Se connecter" %}
+                </a>
+                <a class="btn btn-outline-light btn-lg" href="{% url 'blog:signup' %}" role="button">
+                    <i class="fas fa-user-plus"></i> {% trans "S'inscrire" %}
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>    <!-- Statistiques (pour les utilisateurs connectés uniquement) -->
+    {% if user.is_authenticated %}
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center bg-info text-white">
+                <div class="card-body">
+                    <i class="fas fa-newspaper fa-2x mb-2"></i>
+                    <h5>{{ articles.count }} {% trans "Articles" %}</h5>
+                    <p>{% trans "Total des articles publiés" %}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center bg-success text-white">
+                <div class="card-body">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <h5>{% trans "Communauté" %}</h5>
+                    <p>{% trans "Rejoignez la discussion" %}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center bg-warning text-white">
+                <div class="card-body">
+                    <i class="fas fa-comments fa-2x mb-2"></i>
+                    <h5>{% trans "Commentaires" %}</h5>
+                    <p>{% trans "Partagez vos opinions" %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}    <!-- Liste des articles -->
+    <div class="row">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h2>
+                <i class="fas fa-newspaper"></i> 
+                {% if user.is_authenticated %}
+                    {% trans "Derniers Articles" %}
+                {% else %}
+                    {% trans "Aperçu des Articles" %}
+                {% endif %}
+            </h2>
+            
+            <!-- Filtre par langue avec liens rapides -->
+            <div class="d-flex align-items-center">
+                <div class="dropdown me-3">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageFilter" data-bs-toggle="dropdown">
+                        <i class="fas fa-filter me-1"></i>
+                        {% if current_language_filter %}
+                            {{ current_language_filter|get_language_flag }} {{ current_language_filter|get_language_name }}
+                        {% else %}
+                            {% trans "Toutes les langues" %}
+                        {% endif %}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item {% if not current_language_filter %}active{% endif %}" href="?">
+                            🌐 {% trans "Toutes les langues" %}
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        {% for lang_code, lang_name in available_languages %}
+                        <li><a class="dropdown-item {% if current_language_filter == lang_code %}active{% endif %}" href="?lang={{ lang_code }}">
+                            {{ lang_code|get_language_flag }} {{ lang_name }}
+                        </a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <!-- Liens rapides par langue -->
+                <div class="btn-group" role="group" aria-label="Liens rapides par langue">
+                    <a href="{% url 'blog:articles_par_langue' 'fr' %}" class="btn btn-sm btn-outline-primary">
+                        🇫🇷 Français
+                    </a>
+                    <a href="{% url 'blog:articles_par_langue' 'en' %}" class="btn btn-sm btn-outline-primary">
+                        🇬🇧 English
+                    </a>
+                    <a href="{% url 'blog:articles_par_langue' 'es' %}" class="btn btn-sm btn-outline-primary">
+                        🇪🇸 Español
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">            
+            {% if not user.is_authenticated %}
+            <div class="alert alert-info mb-4">
+                <i class="fas fa-lock"></i>
+                <strong>{% trans "Accès limité" %} :</strong> {% trans "Connectez-vous pour voir tous les articles et accéder aux fonctionnalités complètes." %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        {% for article in articles %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if article.images %}
+                <img src="{{ article.images.url }}" class="card-img-top article-image" alt="{{ article.titre }}" 
+                     data-bs-toggle="modal" data-bs-target="#imageModal" style="cursor: pointer;">
+                {% endif %}
+                
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ article.titre|truncatechars:50 }}</h5>
+                    <p class="card-text flex-grow-1">{{ article.contenu|truncatewords:20 }}</p>
+                      <div class="card-text">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-user"></i> {{ article.auteur.username }}
+                                <i class="fas fa-calendar ms-2"></i> {{ article.date_creation|date:"d/m/Y" }}
+                            </small>
+                              <!-- Badge de langue -->
+                            <span class="badge bg-info">
+                                {{ article.langue|get_language_flag }} {{ article.langue|get_language_name }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    {% if user.is_authenticated %}                    <a href="{% url 'blog:detail_article' article.id %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-eye"></i> {% trans "Lire l'article" %}
+                    </a>
+                    {% if article.auteur == user %}
+                    <a href="{% url 'blog:modifier_article' article.id %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-edit"></i> {% trans "Modifier" %}
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <button class="btn btn-secondary btn-sm" disabled>
+                        <i class="fas fa-lock"></i> {% trans "Connexion requise" %}
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-newspaper fa-4x text-muted mb-3"></i>
+                <h3 class="text-muted">{% trans "Aucun article disponible" %}</h3>
+                {% if user.is_authenticated %}
+                <p class="text-muted">{% trans "Soyez le premier à publier un article !" %}</p>
+                <a href="{% url 'blog:ajouter_article' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> {% trans "Créer le premier article" %}
+                </a>
+                {% else %}
+                <p class="text-muted">{% trans "Connectez-vous pour voir les articles." %}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modals pour les images des articles -->
+{% for article in articles %}
+{% if article.images %}
+<div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ article.titre }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="{{ article.images.url }}" class="img-fluid" alt="{{ article.titre }}">
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+{% endblock %}

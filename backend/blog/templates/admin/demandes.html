@@ -1,0 +1,150 @@
+<!-- filepath: c:\Users\frus84312\AppPython\backend\blog\templates\admin\demandes.html -->
+{% extends 'blog/layout.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Administration" %} - {% trans "Demandes d'auteur" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'blog:admin_panel' %}">
+                    <i class="fas fa-tachometer-alt me-1"></i>{% trans "Dashboard" %}
+                </a>
+            </li>
+            <li class="breadcrumb-item active">{% trans "Demandes d'auteur" %}</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="fas fa-user-check text-warning me-2"></i>
+            {% trans "Demandes d'auteur" %}
+        </h2>
+    </div>
+
+    <!-- Demandes en attente -->
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-clock me-2"></i>
+                {% blocktrans count counter=demandes_en_attente.count %}En attente de validation ({{ counter }}){% plural %}En attente de validation ({{ counter }}){% endblocktrans %}
+            </h5>
+        </div>
+        <div class="card-body">
+            {% if demandes_en_attente %}
+            {% for demande in demandes_en_attente %}
+            <div class="border rounded p-3 mb-3">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h6>
+                            <i class="fas fa-user me-2"></i>
+                            {{ demande.user.first_name|default:demande.user.username }}
+                            <small class="text-muted">({{ demande.user.username }})</small>
+                        </h6>
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-envelope me-1"></i>{{ demande.user.email }}
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-calendar me-1"></i>{% trans "Inscrit le" %} {{ demande.user.date_joined|date:"d/m/Y" }}
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-clock me-1"></i>{% trans "Demande du" %} {{ demande.demande_auteur_date|date:"d/m/Y à H:i" }}
+                        </p>
+                        
+                        {% if demande.demande_auteur_message %}
+                        <div class="alert alert-light">
+                            <strong>{% trans "Message de motivation" %} :</strong><br>
+                            {{ demande.demande_auteur_message|linebreaksbr }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <form method="post" action="{% url 'blog:traiter_demande_auteur' demande.user.id %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="reponse_{{ demande.user.id }}" class="form-label">{% trans "Réponse (optionnel)" %}</label>
+                                <textarea name="reponse" id="reponse_{{ demande.user.id }}" class="form-control" rows="2" placeholder="{% trans 'Message pour l\'utilisateur...' %}"></textarea>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" name="action" value="accepter" class="btn btn-success">
+                                    <i class="fas fa-check me-2"></i>{% trans "Accepter" %}
+                                </button>
+                                <button type="submit" name="action" value="refuser" class="btn btn-outline-danger">
+                                    <i class="fas fa-times me-2"></i>{% trans "Refuser" %}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-check-circle fa-3x mb-3"></i>
+                <h5>{% trans "Aucune demande en attente" %}</h5>
+                <p>{% trans "Toutes les demandes ont été traitées." %}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Historique des demandes traitées -->
+    {% if demandes_traitees %}
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-history me-2"></i>
+                {% trans "Historique récent" %}
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Utilisateur" %}</th>
+                            <th>{% trans "Date demande" %}</th>
+                            <th>{% trans "Statut" %}</th>
+                            <th>{% trans "Réponse admin" %}</th>
+                            <th>{% trans "Date traitement" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for demande in demandes_traitees %}
+                        <tr>
+                            <td>
+                                <strong>{{ demande.user.first_name|default:demande.user.username }}</strong><br>
+                                <small class="text-muted">{{ demande.user.username }}</small>
+                            </td>
+                            <td>{{ demande.demande_auteur_date|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                {% if demande.demande_auteur_statut == 'acceptee' %}
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>{% trans "Acceptée" %}
+                                </span>
+                                {% else %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times me-1"></i>{% trans "Refusée" %}
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if demande.admin_reponse %}
+                                {{ demande.admin_reponse|truncatechars:50 }}
+                                {% else %}
+                                <em class="text-muted">{% trans "Aucune réponse" %}</em>
+                                {% endif %}
+                            </td>
+                            <td>{{ demande.admin_reponse_date|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

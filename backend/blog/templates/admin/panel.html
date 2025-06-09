@@ -1,0 +1,257 @@
+<!-- filepath: c:\Users\frus84312\AppPython\backend\blog\templates\admin\panel.html -->
+{% extends 'blog/layout.html' %}
+{% load static %}
+{% load blog_tags %}
+{% load i18n %}
+
+{% block title %}{% trans "Administration" %} - {% trans "Dashboard" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+.admin-dashboard {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    color: white;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    border-left: 4px solid #007bff;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    opacity: 0.8;
+}
+
+.admin-section {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.quick-action-btn {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.quick-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+    color: white;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Header Admin -->
+    <div class="admin-dashboard">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-0">
+                    <i class="fas fa-tachometer-alt me-3"></i>
+                    {% trans "Dashboard Administrateur" %}
+                </h1>
+                <p class="mb-0 mt-2 opacity-75">
+                    {% blocktrans with username=user.first_name|default:user.username %}Bienvenue {{ username }}, gérez votre plateforme efficacement.{% endblocktrans %}
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+                    <a href="{% url 'blog:admin_demandes' %}" class="quick-action-btn">
+                        <i class="fas fa-user-check me-2"></i>{% trans "Demandes" %}
+                        {% if stats.demandes_en_attente > 0 %}
+                        <span class="badge bg-warning text-dark ms-1">{{ stats.demandes_en_attente }}</span>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stat-card text-primary">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">{{ stats.total_users }}</h3>
+                        <p class="text-muted mb-0">{% trans "Utilisateurs" %}</p>
+                    </div>
+                    <i class="fas fa-users stat-icon"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stat-card text-success">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">{{ stats.total_articles }}</h3>
+                        <p class="text-muted mb-0">{% trans "Articles" %}</p>
+                    </div>
+                    <i class="fas fa-newspaper stat-icon"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stat-card text-info">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">{{ stats.total_commentaires }}</h3>
+                        <p class="text-muted mb-0">{% trans "Commentaires" %}</p>
+                    </div>
+                    <i class="fas fa-comments stat-icon"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="stat-card text-warning">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">{{ stats.auteurs_actifs }}</h3>
+                        <p class="text-muted mb-0">{% trans "Auteurs" %}</p>
+                    </div>
+                    <i class="fas fa-pen-fancy stat-icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Demandes en attente -->
+        <div class="col-lg-6 mb-4">
+            <div class="admin-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>
+                        <i class="fas fa-user-check text-warning me-2"></i>
+                        {% trans "Demandes d'auteur" %}
+                    </h5>
+                    <a href="{% url 'blog:admin_demandes' %}" class="btn btn-outline-primary btn-sm">
+                        {% trans "Voir tout" %}
+                    </a>
+                </div>
+                
+                {% if demandes_en_attente %}
+                <div class="list-group list-group-flush">
+                    {% for demande in demandes_en_attente %}
+                    <div class="list-group-item border-0 px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">{{ demande.user.first_name|default:demande.user.username }}</h6>
+                                <small class="text-muted">{{ demande.demande_auteur_date|timesince }} {% trans "ago" %}</small>
+                            </div>
+                            <div>
+                                <a href="{% url 'blog:admin_demandes' %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-3">
+                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                    <p class="mb-0">{% trans "Aucune demande en attente" %}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Articles récents -->
+        <div class="col-lg-6 mb-4">
+            <div class="admin-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>
+                        <i class="fas fa-newspaper text-success me-2"></i>
+                        {% trans "Articles récents" %}
+                    </h5>
+                    <a href="{% url 'blog:admin_articles' %}" class="btn btn-outline-primary btn-sm">
+                        {% trans "Gérer" %}
+                    </a>
+                </div>
+                
+                {% if articles_recents %}
+                <div class="list-group list-group-flush">
+                    {% for article in articles_recents %}
+                    <div class="list-group-item border-0 px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">{{ article.titre|truncatechars:40 }}</h6>
+                                <small class="text-muted">{% trans "par" %} {{ article.auteur.username }} • {{ article.date_publication|timesince }}</small>
+                            </div>
+                            <div>
+                                <a href="{% url 'blog:detail_article' article.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center text-muted py-3">
+                    <i class="fas fa-newspaper fa-2x mb-2"></i>
+                    <p class="mb-0">{% trans "Aucun article publié" %}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="admin-section">
+        <h5 class="mb-3">
+            <i class="fas fa-bolt text-primary me-2"></i>
+            {% trans "Actions rapides" %}
+        </h5>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'blog:admin_utilisateurs' %}" class="quick-action-btn d-block text-center">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <div>{% trans "Gérer Utilisateurs" %}</div>
+                </a>
+            </div>
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'blog:admin_categories' %}" class="quick-action-btn d-block text-center">
+                    <i class="fas fa-tags fa-2x mb-2"></i>
+                    <div>{% trans "Gérer Catégories" %}</div>
+                </a>
+            </div>
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'blog:ajouter_categorie' %}" class="quick-action-btn d-block text-center">
+                    <i class="fas fa-plus fa-2x mb-2"></i>
+                    <div>{% trans "Nouvelle Catégorie" %}</div>
+                </a>
+            </div>
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'blog:home' %}" class="quick-action-btn d-block text-center">
+                    <i class="fas fa-home fa-2x mb-2"></i>
+                    <div>{% trans "Voir le Site" %}</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

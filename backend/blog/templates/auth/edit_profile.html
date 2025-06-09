@@ -1,0 +1,122 @@
+{% extends 'blog/layout.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Modifier mon profil" %} - {% trans "Mon Blog Django" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="form-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-user-edit me-2"></i>{% trans "Modifier mon profil" %}</h1>
+                <a href="{% url 'blog:profile' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>{% trans "Retour au profil" %}
+                </a>
+            </div>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Informations personnelles -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-user me-2"></i>{% trans "Informations personnelles" %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                                    <i class="fas fa-user me-1"></i>{% trans "Prénom" %}
+                                </label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                <div class="text-danger">{{ form.first_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                                    <i class="fas fa-user me-1"></i>{% trans "Nom" %}
+                                </label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                <div class="text-danger">{{ form.last_name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">
+                                <i class="fas fa-envelope me-1"></i>{% trans "Email" %}
+                            </label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                            <div class="text-danger">{{ form.email.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profil public -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-id-card me-2"></i>{% trans "Profil public" %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="{{ form.bio.id_for_label }}" class="form-label">
+                                <i class="fas fa-quote-left me-1"></i>{% trans "Biographie" %}
+                            </label>
+                            {{ form.bio }}
+                            <div class="form-text">{% trans "Quelques mots sur vous (optionnel)" %}</div>
+                            {% if form.bio.errors %}
+                            <div class="text-danger">{{ form.bio.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.ville.id_for_label }}" class="form-label">
+                                    <i class="fas fa-map-marker-alt me-1"></i>{% trans "Ville" %}
+                                </label>
+                                {{ form.ville }}
+                                {% if form.ville.errors %}
+                                <div class="text-danger">{{ form.ville.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.site_web.id_for_label }}" class="form-label">
+                                    <i class="fas fa-link me-1"></i>{% trans "Site web" %}
+                                </label>
+                                {{ form.site_web }}
+                                {% if form.site_web.errors %}
+                                <div class="text-danger">{{ form.site_web.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.avatar.id_for_label }}" class="form-label">
+                                <i class="fas fa-camera me-1"></i>{% trans "Photo de profil" %}
+                            </label>
+                            {{ form.avatar }}
+                            <div class="form-text">{% trans "Image JPG/PNG, taille maximale 2MB" %}</div>
+                            {% if form.avatar.errors %}
+                            <div class="text-danger">{{ form.avatar.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'blog:profile' %}" class="btn btn-secondary">
+                        <i class="fas fa-times me-1"></i>{% trans "Annuler" %}
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i>{% trans "Enregistrer les modifications" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

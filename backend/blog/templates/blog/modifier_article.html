@@ -1,0 +1,131 @@
+{% extends 'blog/layout.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Modifier l'article" %} - {% trans "Mon Blog Django" %}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1><i class="fas fa-edit me-2"></i>{% trans "Modifier l'article" %}</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="{{ form.titre.id_for_label }}" class="form-label">
+                <i class="fas fa-heading me-1"></i>{% trans "Titre" %} :
+            </label>
+            {{ form.titre }}
+            {% if form.titre.errors %}
+                <div class="text-danger small mt-1">{{ form.titre.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-3">
+            <label for="{{ form.auteur.id_for_label }}" class="form-label">
+                <i class="fas fa-user me-1"></i>{% trans "Auteur" %} :
+            </label>
+            {{ form.auteur }}
+            {% if form.auteur.errors %}
+                <div class="text-danger small mt-1">{{ form.auteur.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-3">
+            <label for="{{ form.contenu.id_for_label }}" class="form-label">
+                <i class="fas fa-align-left me-1"></i>{% trans "Contenu" %} :
+            </label>
+            {{ form.contenu }}
+            {% if form.contenu.errors %}
+                <div class="text-danger small mt-1">{{ form.contenu.errors }}</div>
+            {% endif %}
+        </div>
+          <div class="mb-3">
+            <label for="{{ form.categorie.id_for_label }}" class="form-label">
+                <i class="fas fa-tag me-1"></i>{% trans "Catégorie" %} :
+            </label>
+            {{ form.categorie }}
+            {% if form.categorie.errors %}
+                <div class="text-danger small mt-1">{{ form.categorie.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.langue.id_for_label }}" class="form-label">
+                <i class="fas fa-globe me-1"></i>{% trans "Langue de l'article" %} :
+            </label>
+            {{ form.langue }}
+            {% if form.langue.errors %}
+                <div class="text-danger small mt-1">{{ form.langue.errors }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Section Image améliorée -->
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="fas fa-image me-1"></i>{% trans "Gestion de l'image" %} :
+            </label>
+            
+            {% if article.images %}
+                <div class="current-image-section">
+                    <h6 class="mb-3">
+                        <i class="fas fa-image me-1"></i>{% trans "Image actuelle" %} :
+                    </h6>
+                    <div class="text-center mb-3">
+                        <img src="{{ article.images.url }}" 
+                             alt="{{ article.titre }}" 
+                             class="current-image-preview">
+                    </div>
+                    
+                    <div class="image-actions">
+                        <div class="form-check">
+                            <input type="checkbox" 
+                                   class="form-check-input remove-image-checkbox" 
+                                   id="remove_image" 
+                                   name="remove_image" 
+                                   value="1">
+                            <label class="form-check-label remove-image-label" for="remove_image">
+                                <i class="fas fa-trash me-1"></i>
+                                {% trans "Supprimer l'image actuelle" %}
+                            </label>
+                        </div>
+                        
+                        <div class="file-upload-info mt-3">
+                            <h6 class="mb-2">
+                                <i class="fas fa-upload me-1"></i>{% trans "Remplacer par une nouvelle image" %} :
+                            </h6>
+                            {{ form.images }}
+                            <small class="text-muted d-block mt-1">
+                                <i class="fas fa-info-circle me-1"></i>
+                                {% trans "Si vous sélectionnez une nouvelle image, elle remplacera automatiquement l'actuelle." %}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="file-upload-info">
+                    <h6 class="mb-2">
+                        <i class="fas fa-upload me-1"></i>{% trans "Ajouter une image" %} :
+                    </h6>
+                    {{ form.images }}
+                    <small class="text-muted d-block mt-1">
+                        <i class="fas fa-info-circle me-1"></i>
+                        {% trans "Formats acceptés : JPG, PNG, GIF (Max 5MB)" %}
+                    </small>
+                </div>
+            {% endif %}
+            
+            {% if form.images.errors %}
+                <div class="text-danger small mt-1">{{ form.images.errors }}</div>
+            {% endif %}
+        </div>
+          <div class="text-center">
+            <button class="btn btn-success me-3" type="submit">
+                <i class="fas fa-save me-1"></i>{% trans "Enregistrer les modifications" %}
+            </button>
+            <a href="{% url 'blog:detail_article' article.pk %}" class="btn btn-secondary">
+                <i class="fas fa-times me-1"></i>{% trans "Annuler" %}
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'blog/layout.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Connexion" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        {% trans "Connexion" %}
+                    </h3>
+                </div>
+                
+                <div class="card-body p-5">
+                    <form method="post">
+                        <!-- ⚠️ IMPORTANT : Token CSRF obligatoire -->
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                <i class="fas fa-user me-1"></i>{% trans "Nom d'utilisateur" %}
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="username" 
+                                   name="username" 
+                                   required 
+                                   autofocus>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-1"></i>{% trans "Mot de passe" %}
+                            </label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="password" 
+                                   name="password" 
+                                   required>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                {% trans "Se connecter" %}
+                            </button>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="mb-0">
+                                {% trans "Pas encore de compte ?" %} 
+                                <a href="{% url 'blog:signup' %}" class="text-primary text-decoration-none">
+                                    <i class="fas fa-user-plus me-1"></i>{% trans "S'inscrire" %}
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
